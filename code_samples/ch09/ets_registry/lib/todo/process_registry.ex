@@ -1,6 +1,8 @@
 # ETS-based process registry
 
 defmodule Todo.ProcessRegistry do
+  use GenServer
+
   # We still need a process which will act as a synchronization point for different
   # registrations. It will also be the owner of the ETS table.
   def start_link do

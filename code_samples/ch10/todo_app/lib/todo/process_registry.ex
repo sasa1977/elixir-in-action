@@ -1,4 +1,6 @@
 defmodule Todo.ProcessRegistry do
+  use GenServer
+
   def start_link do
     IO.puts "Starting process registry"
     GenServer.start_link(__MODULE__, nil, name: :process_registry)

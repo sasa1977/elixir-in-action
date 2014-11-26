@@ -1,4 +1,5 @@
 defmodule Todo.ProcessRegistry do
+  use GenServer
   import Kernel, except: [send: 2]
 
   def start_link do
@@ -51,24 +52,25 @@ defmodule Todo.ProcessRegistry do
     {:reply, key, HashDict.delete(process_registry, key)}
   end
 
-  # Handles termination of a registered process
   def handle_info({:DOWN, _, :process, pid, _}, process_registry) do
-    # We'll walk through each {key, value} item, and delete those elements whose
-    # value is identical to the pid of the terminated process.
-    new_registry =
-      Enum.reduce(
-        process_registry,
-        process_registry,
-        fn
-          ({registered_alias, registered_process}, registry_acc) when registered_process == pid ->
-            HashDict.delete(registry_acc, registered_alias)
-
-          (_, registry_acc) -> registry_acc
-        end
-      )
-
-    {:noreply, new_registry}
+    {:noreply, deregister_pid(process_registry, pid)}
   end
 
   def handle_info(_, state), do: {:noreply, state}
+
+
+  defp deregister_pid(process_registry, pid) do
+    # We'll walk through each {key, value} item, and delete those elements whose
+    # value is identical to the provided pid.
+    Enum.reduce(
+      process_registry,
+      process_registry,
+      fn
+        ({registered_alias, registered_process}, registry_acc) when registered_process == pid ->
+          HashDict.delete(registry_acc, registered_alias)
+
+        (_, registry_acc) -> registry_acc
+      end
+    )
+  end
 end
