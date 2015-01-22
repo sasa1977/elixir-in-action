@@ -11,8 +11,8 @@ defmodule Todo.Database do
         __MODULE__, :store_local, [key, data],
         :timer.seconds(5)
       )
-    [] = bad_nodes
-    true = Enum.all?(results, fn(result) -> result == :ok end)
+    Enum.each(bad_nodes, &IO.puts("Store failed on node #{&1}"))
+    :ok
   end
 
   def store_local(key, data) do
