@@ -17,14 +17,6 @@ defmodule Todo.Server do
     GenServer.call(todo_server, {:entries, date})
   end
 
-  def update_entry(todo_server, entry_id, updater_fun) do
-    GenServer.call(todo_server, {:update_entry, entry_id, updater_fun})
-  end
-
-  def delete_entry(todo_server, entry_id) do
-    GenServer.call(todo_server, {:delete_entry, entry_id})
-  end
-
   def whereis(name) do
     :global.whereis_name({:todo_server, name})
   end
@@ -41,17 +33,6 @@ defmodule Todo.Server do
     {:reply, :ok, {name, todo_list}}
   end
 
-  def handle_call({:update_entry, entry_id, updater_fun}, _, {name, todo_list}) do
-    new_state = Todo.List.update_entry(todo_list, entry_id, updater_fun)
-    Todo.Database.store(name, new_state)
-    {:reply, :ok, {name, new_state}}
-  end
-
-  def handle_call({:delete_entry, entry_id}, _, {name, todo_list}) do
-    new_state = Todo.List.delete_entry(todo_list, entry_id)
-    Todo.Database.store(name, new_state)
-    {:reply, :ok, {name, new_state}}
-  end
 
   def handle_call({:entries, date}, _, {name, todo_list}) do
     {

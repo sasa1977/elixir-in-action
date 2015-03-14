@@ -15,7 +15,6 @@ defmodule Todo.Server do
     GenServer.call(todo_server, {:entries, date})
   end
 
-
   def whereis(name) do
     :gproc.whereis_name({:n, :l, {:todo_server, name}})
   end
@@ -23,6 +22,7 @@ defmodule Todo.Server do
   defp via_tuple(name) do
     {:via, :gproc, {:n, :l, {:todo_server, name}}}
   end
+
 
   def init(name) do
     # We don't restore from the database immediately. Instead, we'll lazily
