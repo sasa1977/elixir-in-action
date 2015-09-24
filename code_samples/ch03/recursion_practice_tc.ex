@@ -5,28 +5,33 @@ defmodule Loop do
   defp calc_list_len([_ | tail], len) do
     calc_list_len(tail, len + 1)
   end
-  
 
 
+
+  # This solution collects backwards, starting with the `to` and going
+  # back to from. This allows us to make a single pass collection and
+  # still retain tail-recursive property. See the second clause of
+  # `make_range/3` for explanation.
+  #
+  # Thanks to the anonymous poster for pointing this out to me
+  # at the book's forum (https://forums.manning.com/posts/list/36894.page)
   def range(from, to) do
     make_range(from, to, [])
   end
 
+  # At this point we have the result
   defp make_range(from, to, result) when from > to do
-    # The accumulation has built the result in the inverse order
-    # so we have to reverse it.
-    Enum.reverse(result)
+    result
   end
 
   defp make_range(from, to, result) do
-    # Notice how we push from to the top of the new result. This
-    # is a very fast operation, but it makes the result in the
-    # inverse order. Therefore, at the end of the iteration, we will have
-    # to reverse the result (see above).
-    #
-    # This is an example of a case where tail recursive approach is slower,
-    # since it takes another pass over the entire list to reverse the result.
-    make_range(from + 1, to, [from | result])
+    # - We first prepend `to` to the top of the accumulated list.
+    # - Then, we just loop the recursion with decremented `to`.
+    # - Since this is the last thing done in the function, it's a tail-recursive
+    #   call.
+    # - Since we continuously prepend decrementing `to`s to the result, we'll
+    #   get the result in the proper order.
+    make_range(from, to - 1, [to | result])
   end
 
 
@@ -36,7 +41,11 @@ defmodule Loop do
   end
 
   defp filter_positive([], result) do
-    # Again, we have to reverse the result
+    # Here we can't do the trick as with `range/2` above, since we
+    # can only traverse the list forward from the head to the tail.
+    # Thus, when we collect the result, it will be reversed (see the second
+    # clause of `filter_positive/2`). So we need to do one final reversal of
+    # the result to get it in the proper order.
     Enum.reverse(result)
   end
 
