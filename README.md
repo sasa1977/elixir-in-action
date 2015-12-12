@@ -1,3 +1,3 @@
-This repository contains accompanying code for the [Elixir in Action](http://www.manning.com/juric/) book. To compile and run the code, you'll need Elixir 1.x and Erlang 17.0. A `git` client should also be installed and available somewhere in the execution path.
+This repository contains accompanying code for the [Elixir in Action](http://www.manning.com/juric/) book. To compile and run the code, you'll need Elixir 1.2 and Erlang 18.x. A `git` client should also be installed and available somewhere in the execution path.
 
-The code in the master branch corresponds to the code in the printed edition. There are other branches in this repository, where code is adapted to run on subsequent Elixir versions.
+The code in this branch contains fixes required for Elixir versions released after the first edition of the book. Depending on which Elixir version you use, you may need to checkout the corresponding tag in this repository.
