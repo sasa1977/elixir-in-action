@@ -30,7 +30,7 @@ defmodule Todo.Database do
   end
 
   defp start_workers(db_folder) do
-    for index <- 1..3, into: HashDict.new do
+    for index <- 1..3, into: %{} do
       {:ok, pid} = Todo.DatabaseWorker.start(db_folder)
       {index - 1, pid}
     end
@@ -38,16 +38,16 @@ defmodule Todo.Database do
 
   def handle_call({:choose_worker, key}, _, workers) do
     worker_key = :erlang.phash2(key, 3)
-    {:reply, HashDict.get(workers, worker_key), workers}
+    {:reply, Map.get(workers, worker_key), workers}
   end
 
   # Needed for testing purposes
   def handle_info(:stop, workers) do
     workers
-    |> HashDict.values
+    |> Map.values
     |> Enum.each(&send(&1, :stop))
 
-    {:stop, :normal, HashDict.new}
+    {:stop, :normal, %{}}
   end
   def handle_info(_, state), do: {:noreply, state}
 end

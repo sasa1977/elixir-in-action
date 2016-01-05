@@ -43,7 +43,7 @@ defmodule Todo.DatabaseWorker do
       :ok,
       %{
         store_job: nil,             # Pid of the storing job
-        store_queue: HashDict.new   # Queue of incoming items to store
+        store_queue: %{}   # Queue of incoming items to store
       }
     }
   end
@@ -89,7 +89,7 @@ defmodule Todo.DatabaseWorker do
 
 
   defp queue_request(state, from, key, data) do
-    %{state | store_queue: HashDict.put(state.store_queue, key, {from, data})}
+    %{state | store_queue: Map.put(state.store_queue, key, {from, data})}
   end
 
 
@@ -97,7 +97,7 @@ defmodule Todo.DatabaseWorker do
     # store_job is nil, so nothing is storing at the moment, and we can safely
     # start storing the queue
 
-    if HashDict.size(state.store_queue) > 0 do
+    if Map.size(state.store_queue) > 0 do
       start_store_job(state)
     else
       state   # queue is empty, so there's nothing to store
@@ -118,7 +118,7 @@ defmodule Todo.DatabaseWorker do
     Process.monitor(store_job)
 
     %{state |
-      store_queue: HashDict.new,    # Empty the queue
+      store_queue: %{},    # Empty the queue
       store_job: store_job
     }
   end

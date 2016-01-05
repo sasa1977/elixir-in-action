@@ -43,7 +43,7 @@ end
 
 
 defmodule TodoList do
-  defstruct auto_id: 1, entries: HashDict.new
+  defstruct auto_id: 1, entries: %{}
 
   def new(entries \\ []) do
     Enum.reduce(
@@ -58,7 +58,7 @@ defmodule TodoList do
     entry
   ) do
     entry = Map.put(entry, :id, auto_id)
-    new_entries = HashDict.put(entries, auto_id, entry)
+    new_entries = Map.put(entries, auto_id, entry)
 
     %TodoList{todo_list |
       entries: new_entries,
@@ -92,7 +92,7 @@ defmodule TodoList do
 
       old_entry ->
         new_entry = updater_fun.(old_entry)
-        new_entries = HashDict.put(entries, new_entry.id, new_entry)
+        new_entries = Map.put(entries, new_entry.id, new_entry)
         %TodoList{todo_list | entries: new_entries}
     end
   end
@@ -102,6 +102,6 @@ defmodule TodoList do
     %TodoList{entries: entries} = todo_list,
     entry_id
   ) do
-    %TodoList{todo_list | entries: HashDict.delete(entries, entry_id)}
+    %TodoList{todo_list | entries: Map.delete(entries, entry_id)}
   end
 end

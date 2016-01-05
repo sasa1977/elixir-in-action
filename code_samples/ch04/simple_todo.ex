@@ -1,8 +1,8 @@
 defmodule TodoList do
-  def new, do: HashDict.new
+  def new, do: %{}
 
   def add_entry(todo_list, date, title) do
-    HashDict.update(
+    Map.update(
       todo_list,
       date,
       [title],
@@ -11,6 +11,6 @@ defmodule TodoList do
   end
 
   def entries(todo_list, date) do
-    HashDict.get(todo_list, date, [])
+    Map.get(todo_list, date, [])
   end
 end

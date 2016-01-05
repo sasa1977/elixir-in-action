@@ -3,7 +3,7 @@ defmodule Todo.List do
   # we split it per each day. This allows us to quickly fetch entries for the
   # given day, but also to reduce the amount of data that must be store to the
   # database on each change.
-  defstruct days: HashDict.new, size: 0
+  defstruct days: %{}, size: 0
 
   def new(entries \\ []) do
     Enum.reduce(
@@ -15,7 +15,7 @@ defmodule Todo.List do
 
   def add_entry(todo_list, entry) do
     %Todo.List{todo_list |
-      days: HashDict.update(todo_list.days, entry.date, [entry], &[entry | &1]),
+      days: Map.update(todo_list.days, entry.date, [entry], &[entry | &1]),
       size: todo_list.size + 1
     }
   end
@@ -26,6 +26,6 @@ defmodule Todo.List do
 
   # We need this to restore entries for the given date from the database.
   def set_entries(todo_list, date, entries) do
-    %Todo.List{todo_list | days: HashDict.put(todo_list.days, date, entries)}
+    %Todo.List{todo_list | days: Map.put(todo_list.days, date, entries)}
   end
 end

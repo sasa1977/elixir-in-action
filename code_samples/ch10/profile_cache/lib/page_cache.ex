@@ -10,14 +10,14 @@ defmodule PageCache do
   end
 
   def init(_) do
-    {:ok, HashDict.new}
+    {:ok, %{}}
   end
 
   def handle_call({:cached, key, fun}, _, cache) do
-    case HashDict.get(cache, key) do
+    case Map.get(cache, key) do
       nil ->
         response = fun.()
-        {:reply, response, HashDict.put(cache, key, response)}
+        {:reply, response, Map.put(cache, key, response)}
       response -> {:reply, response, cache}
     end
   end

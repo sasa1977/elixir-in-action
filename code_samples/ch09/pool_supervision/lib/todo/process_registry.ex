@@ -29,27 +29,27 @@ defmodule Todo.ProcessRegistry do
   end
 
   def init(_) do
-    {:ok, HashDict.new}
+    {:ok, %{}}
   end
 
 
   def handle_call({:register_name, key, pid}, _, process_registry) do
-    case HashDict.get(process_registry, key) do
+    case Map.get(process_registry, key) do
       nil ->
         # Sets up a monitor to the registered process
         Process.monitor(pid)
-        {:reply, :yes, HashDict.put(process_registry, key, pid)}
+        {:reply, :yes, Map.put(process_registry, key, pid)}
       _ ->
         {:reply, :no, process_registry}
     end
   end
 
   def handle_call({:whereis_name, key}, _, process_registry) do
-    {:reply, HashDict.get(process_registry, key, :undefined), process_registry}
+    {:reply, Map.get(process_registry, key, :undefined), process_registry}
   end
 
   def handle_call({:unregister_name, key}, _, process_registry) do
-    {:reply, key, HashDict.delete(process_registry, key)}
+    {:reply, key, Map.delete(process_registry, key)}
   end
 
   def handle_info({:DOWN, _, :process, pid, _}, process_registry) do
@@ -67,7 +67,7 @@ defmodule Todo.ProcessRegistry do
       process_registry,
       fn
         ({registered_alias, registered_process}, registry_acc) when registered_process == pid ->
-          HashDict.delete(registry_acc, registered_alias)
+          Map.delete(registry_acc, registered_alias)
 
         (_, registry_acc) -> registry_acc
       end
