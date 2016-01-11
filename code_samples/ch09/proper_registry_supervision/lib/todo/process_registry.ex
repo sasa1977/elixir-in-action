@@ -60,17 +60,10 @@ defmodule Todo.ProcessRegistry do
 
 
   defp deregister_pid(process_registry, pid) do
-    # We'll walk through each {key, value} item, and delete those elements whose
-    # value is identical to the provided pid.
-    Enum.reduce(
-      process_registry,
-      process_registry,
-      fn
-        ({registered_alias, registered_process}, registry_acc) when registered_process == pid ->
-          Map.delete(registry_acc, registered_alias)
-
-        (_, registry_acc) -> registry_acc
-      end
-    )
+    # We'll walk through each {key, value} item, and keep those elements whose
+    # value is different to the provided pid.
+    process_registry
+    |> Enum.filter(fn({_registered_alias, registered_process}) -> registered_process != pid end)
+    |> Enum.into(%{})
   end
 end
