@@ -18,15 +18,7 @@ defmodule EnumStreams do
 
   def longest_line!(path) do
     filtered_lines!(path)
-    |> Enum.reduce("", &longer_line/2)
-  end
-
-  defp longer_line(line1, line2) do
-    if String.length(line1) > String.length(line2) do
-      line1
-    else
-      line2
-    end
+    |> Enum.max_by(&String.length(&1))
   end
 
 
