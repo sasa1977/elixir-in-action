@@ -19,6 +19,14 @@ defmodule EnumStreams do
   def longest_line!(path) do
     filtered_lines!(path)
     |> Enum.reduce("", &longer_line/2)
+
+    # Note: this can be done in a simpler way with:
+    #   filtered_lines!(path) |> Enum.max_by(&String.length/1)
+    #
+    # The purpose of reduce here is merely to practice and understand how
+    # it works.
+    # Thanks to Yurii Bodarev (https://github.com/Molly101) for pointing this out
+    # (https://github.com/sasa1977/elixir-in-action/pull/3)
   end
 
   defp longer_line(line1, line2) do
