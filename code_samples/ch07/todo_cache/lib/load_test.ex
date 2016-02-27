@@ -1,29 +1,35 @@
 # Very quick, inconclusive load test
 # Start from command line with:
-#   iex --erl '+P 2000000' -S mix run -e LoadTest.run
+#   iex --erl "+P 2000000" -S mix run -e LoadTest.run
 # Note: the +P 2000000 sets maximum number of processes to 2 millions
 defmodule LoadTest do
-  @size 1_000_000
-  @interval 100_000
+  @total_processes 1_000_000
+  @interval_size 100_000
 
   def run do
     {:ok, cache} = Todo.Cache.start
 
-    0..(round(@size/@interval) - 1)
-    |> Enum.each(&run_interval(cache, &1 * @interval))
+    interval_count = round(@total_processes/@interval_size)
+    0..(interval_count - 1)
+    |> Enum.each(&run_interval(cache, make_interval(&1)))
   end
 
-  defp run_interval(cache, start) do
+  defp make_interval(n) do
+    start = n * @interval_size
+    start..(start + @interval_size - 1)
+  end
+
+  defp run_interval(cache, interval) do
     {time, _} = :timer.tc(fn ->
-      start..(start + @interval - 1)
+      interval
       |> Enum.each(&Todo.Cache.server_process(cache, "cache_#{&1}"))
     end)
-    IO.puts "#{start + @interval} put #{time/@interval} μs"
+    IO.puts "#{inspect interval}: average put #{time/@interval_size} μs"
 
     {time, _} = :timer.tc(fn ->
-      start..(start + @interval)
+      interval
       |> Enum.each(&Todo.Cache.server_process(cache, "cache_#{&1}"))
     end)
-    IO.puts "#{start + @interval} get #{time/@interval} μs\n"
+    IO.puts "#{inspect interval}: average get #{time/@interval_size} μs\n"
   end
 end
