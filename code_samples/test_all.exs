@@ -15,7 +15,10 @@ defmodule EIA.TestRunner do
   defp execute_command(_, error), do: error
 
   defp print_result(:ok), do: IO.puts("\nDone!\n")
-  defp print_result({:error, error}), do: IO.puts("\nError:\n\n#{error}\n")
+  defp print_result({:error, error}) do
+    IO.puts(:standard_error, "\nError:\n\n#{error}\n")
+    System.halt(1)
+  end
 
 
   defp check_elixir_version(project_root \\ ".") do
