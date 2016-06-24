@@ -1,1 +1,1 @@
-%{"meck": {:hex, :meck, "0.8.2"}}
+%{"meck": {:hex, :meck, "0.8.2", "f15f7d513e14ec8c8dee9a95d4ae585b3e5a88bf0fa6a7573240d6ddb58a7236", [:make, :rebar], []}}

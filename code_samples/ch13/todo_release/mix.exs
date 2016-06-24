@@ -20,8 +20,8 @@ defmodule Todo.Mixfile do
     [
       {:gproc, "0.3.1"},
       {:cowboy, "1.0.0"},
-      {:plug, "0.10.0"},
-      {:exrm, "0.14.11"},
+      {:plug, "1.1.6"},
+      {:exrm, "1.0.5"},
       {:meck, "0.8.2", only: :test},
       {:httpoison, "0.8.0", only: :test}
     ]
