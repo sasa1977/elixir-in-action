@@ -1,7 +1,7 @@
 defmodule DatabaseServer do
   def start do
     spawn(fn ->
-      connection = :random.uniform(1000)
+      connection = :rand.uniform(1000)
       loop(connection)
     end)
   end
