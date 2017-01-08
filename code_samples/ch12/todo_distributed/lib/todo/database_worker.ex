@@ -27,7 +27,7 @@ defmodule Todo.DatabaseWorker do
   def init(db_folder) do
     # Node name is used to determine the database folder. This allows us to
     # start multiple nodes from the same folders, and data will not clash.
-    [name_prefix, _] = "#{node}" |> String.split("@")
+    [name_prefix, _] = "#{node()}" |> String.split("@")
     db_folder = "#{db_folder}/#{name_prefix}/"
     File.mkdir_p(db_folder)
 

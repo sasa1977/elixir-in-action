@@ -5,7 +5,7 @@ defmodule Todo.Mixfile do
     [ app: :todo,
       version: "0.0.1",
       elixir: "~> 1.0",
-      deps: deps
+      deps: deps()
     ]
   end
 

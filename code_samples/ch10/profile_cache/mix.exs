@@ -5,7 +5,7 @@ defmodule ProfileCache.Mixfile do
     [app: :profile_cache,
      version: "0.0.1",
      elixir: "~> 1.0",
-     deps: deps]
+     deps: deps()]
   end
 
   # Configuration for the OTP application
