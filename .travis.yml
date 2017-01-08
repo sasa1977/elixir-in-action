@@ -1,8 +1,8 @@
 language: elixir
 elixir:
-  - 1.2.2
+  - 1.4
 otp_release:
-  - 18.2.1
+  - 19.2
 install:
   - mix local.hex --force
 script:
