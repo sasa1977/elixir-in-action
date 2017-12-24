@@ -1,2 +1,4 @@
-%{"gproc": {:hex, :gproc, "0.3.1", "ec14f40cb941bde3f940de59c11e59beb2977e90dbae72fab3ddf77743fd4ea9", [:rebar], []},
-  "meck": {:hex, :meck, "0.8.2", "f15f7d513e14ec8c8dee9a95d4ae585b3e5a88bf0fa6a7573240d6ddb58a7236", [:make, :rebar], []}}
+%{
+  "gproc": {:hex, :gproc, "0.3.1", "ec14f40cb941bde3f940de59c11e59beb2977e90dbae72fab3ddf77743fd4ea9", [:rebar], []},
+  "meck": {:hex, :meck, "0.8.9", "64c5c0bd8bcca3a180b44196265c8ed7594e16bcc845d0698ec6b4e577f48188", [:rebar3], [], "hexpm"},
+}

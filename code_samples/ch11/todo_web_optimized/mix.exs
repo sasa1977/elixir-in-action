@@ -21,7 +21,7 @@ defmodule Todo.Mixfile do
       {:gproc, "0.3.1"},
       {:cowboy, "1.0.4"},
       {:plug, "1.3.0"},
-      {:meck, "0.8.2", only: :test},
+      {:meck, "0.8.9", only: :test},
       {:httpoison, "0.8.0", only: :test}
     ]
   end

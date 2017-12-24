@@ -19,7 +19,7 @@ defmodule Todo.Mixfile do
   defp deps do
     [
       {:gproc, "0.3.1"},
-      {:meck, "0.8.2", only: :test}
+      {:meck, "0.8.9", only: :test}
     ]
   end
 end
