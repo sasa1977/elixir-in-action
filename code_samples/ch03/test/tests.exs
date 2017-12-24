@@ -27,10 +27,6 @@ defmodule Test do
     assert {:error, {:unknown_shape, :foo}} == Geometry.area(:foo)
   end
 
-  test_script "lines_counter" do
-    assert 3 == LinesCounter.count(@test_file)
-  end
-
   test_script "natural_nums" do
     assert :ok == NaturalNums.print(3)
   end
@@ -85,5 +81,19 @@ defmodule Test do
     assert :zero == TestNum.test(0)
     assert :positive == TestNum.test(1)
     assert_raise FunctionClauseError, fn -> TestNum.test(:foo) end
+  end
+
+  test_script "user_extraction" do
+    assert {:error, "login missing"} == UserExtraction.extract_user(%{})
+    assert {:error, "email missing"} == UserExtraction.extract_user(%{"login" => "a"})
+    assert {:error, "password missing"} == UserExtraction.extract_user(%{"login" => "a", "email" => "b"})
+    assert {:ok, %{email: "b", login: "a", password: "c"}} == UserExtraction.extract_user(%{"login" => "a", "email" => "b", "password" => "c"})
+  end
+
+  test_script "user_extraction_2" do
+    assert {:error, "missing fields: login, email, password"} == UserExtraction.extract_user(%{})
+    assert {:error, "missing fields: email, password"} == UserExtraction.extract_user(%{"login" => "a"})
+    assert {:error, "missing fields: password"} == UserExtraction.extract_user(%{"login" => "a", "email" => "b"})
+    assert {:ok, %{email: "b", login: "a", password: "c"}} == UserExtraction.extract_user(%{"login" => "a", "email" => "b", "password" => "c"})
   end
 end

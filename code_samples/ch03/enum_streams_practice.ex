@@ -15,7 +15,6 @@ defmodule EnumStreams do
     |> Enum.reduce(0, &max/2)
   end
 
-
   def longest_line!(path) do
     filtered_lines!(path)
     |> Enum.reduce("", &longer_line/2)
@@ -36,7 +35,6 @@ defmodule EnumStreams do
       line2
     end
   end
-
 
   def words_per_line!(path) do
     filtered_lines!(path)

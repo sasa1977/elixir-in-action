@@ -1,10 +1,9 @@
 defmodule Loop do
   def list_len([]), do: 0
+
   def list_len([_ | tail]) do
     1 + list_len(tail)
   end
-
-
 
   def range(from, to) when from > to do
     []
@@ -14,10 +13,8 @@ defmodule Loop do
     [from | range(from + 1, to)]
   end
 
-
-
   def positive([]), do: []
-  
+
   def positive([head | tail]) when head > 0 do
     [head | positive(tail)]
   end
