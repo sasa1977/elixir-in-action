@@ -13,8 +13,8 @@ defmodule DatabaseServer do
   def get_result do
     receive do
       {:query_result, result} -> result
-    after 5000 ->
-      {:error, :timeout}
+    after
+      5000 -> {:error, :timeout}
     end
   end
 

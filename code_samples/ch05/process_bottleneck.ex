@@ -5,6 +5,7 @@ defmodule Server do
 
   def send_msg(server, message) do
     send(server, {self, message})
+
     receive do
       {:response, response} -> response
     end
@@ -17,6 +18,6 @@ defmodule Server do
         send(caller, {:response, msg})
     end
 
-    loop
+    loop()
   end
 end

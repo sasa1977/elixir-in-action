@@ -10,8 +10,8 @@ defmodule DatabaseServer do
   def get_result do
     receive do
       {:query_result, result} -> result
-    after 5000 ->
-      {:error, :timeout}
+    after
+      5000 -> {:error, :timeout}
     end
   end
 
@@ -21,7 +21,7 @@ defmodule DatabaseServer do
         send(caller, {:query_result, run_query(query_def)})
     end
 
-    loop
+    loop()
   end
 
   defp run_query(query_def) do

@@ -1,6 +1,6 @@
 defmodule TodoServer do
   def start do
-    spawn(fn -> loop(TodoList.new) end)
+    spawn(fn -> loop(TodoList.new()) end)
   end
 
   def add_entry(todo_server, new_entry) do
@@ -12,21 +12,19 @@ defmodule TodoServer do
 
     receive do
       {:todo_entries, entries} -> entries
-    after 5000 ->
-      {:error, :timeout}
+    after
+      5000 -> {:error, :timeout}
     end
   end
 
-
   defp loop(todo_list) do
-    new_todo_list = receive do
-      message ->
-        process_message(todo_list, message)
-    end
+    new_todo_list =
+      receive do
+        message -> process_message(todo_list, message)
+      end
 
     loop(new_todo_list)
   end
-
 
   defp process_message(todo_list, {:add_entry, new_entry}) do
     TodoList.add_entry(todo_list, new_entry)
@@ -39,8 +37,6 @@ defmodule TodoServer do
 
   defp process_message(todo_list, _), do: todo_list
 end
-
-
 
 defmodule TodoList do
   defstruct auto_id: 1, entries: %{}
@@ -57,10 +53,7 @@ defmodule TodoList do
     entry = Map.put(entry, :id, todo_list.auto_id)
     new_entries = Map.put(todo_list.entries, todo_list.auto_id, entry)
 
-    %TodoList{todo_list |
-      entries: new_entries,
-      auto_id: todo_list.auto_id + 1
-    }
+    %TodoList{todo_list | entries: new_entries, auto_id: todo_list.auto_id + 1}
   end
 
   def entries(todo_list, date) do
@@ -70,7 +63,7 @@ defmodule TodoList do
   end
 
   def update_entry(todo_list, %{} = new_entry) do
-    update_entry(todo_list, new_entry.id, fn(_) -> new_entry end)
+    update_entry(todo_list, new_entry.id, fn _ -> new_entry end)
   end
 
   def update_entry(todo_list, entry_id, updater_fun) do
