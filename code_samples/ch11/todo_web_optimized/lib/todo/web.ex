@@ -8,7 +8,7 @@ defmodule Todo.Web do
     Plug.Adapters.Cowboy.http(__MODULE__, nil, port: 5454)
   end
 
-  # curl 'http://localhost:5454/entries?list=bob&date=20131219'
+  # curl 'http://localhost:5454/entries?list=bob&date=20181219'
   get "/entries" do
     conn
     |> Plug.Conn.fetch_query_params
@@ -39,7 +39,7 @@ defmodule Todo.Web do
   end
 
 
-  # curl -d '' 'http://localhost:5454/add_entry?list=bob&date=20131219&title=Dentist'
+  # curl -d '' 'http://localhost:5454/add_entry?list=bob&date=20181219&title=Dentist'
   post "/add_entry" do
     conn
     |> Plug.Conn.fetch_query_params

@@ -18,7 +18,7 @@ defmodule Test do
       |> TodoList.add_entry(~D[2018-01-02], "Dentist")
 
     assert ["Dinner"] == TodoList.entries(list, ~D[2018-01-01])
-    assert [] == TodoList.entries(list, ~D[2015-01-03])
+    assert [] == TodoList.entries(list, ~D[2018-01-03])
   end
 
   test_script "todo_multi_dict" do
@@ -29,7 +29,7 @@ defmodule Test do
       |> TodoList.add_entry(~D[2018-01-02], "Meeting")
 
     assert ["Meeting", "Dentist"] == TodoList.entries(list, ~D[2018-01-02])
-    assert [] == TodoList.entries(list, ~D[2015-01-03])
+    assert [] == TodoList.entries(list, ~D[2018-01-03])
   end
 
   test_script "todo_entry_map" do
@@ -40,7 +40,7 @@ defmodule Test do
       |> TodoList.add_entry(%{date: ~D[2018-01-02], title: "Meeting"})
 
     assert [%{date: ~D[2018-01-01], title: "Dinner"}] == TodoList.entries(list, ~D[2018-01-01])
-    assert [] == TodoList.entries(list, ~D[2015-01-03])
+    assert [] == TodoList.entries(list, ~D[2018-01-03])
   end
 
   test_script "todo_crud" do
@@ -68,11 +68,11 @@ defmodule Test do
       %{date: ~D[2018-01-02], title: "Meeting"}
     ])
     assert [%{date: ~D[2018-01-01], id: 1, title: "Dinner"}] == TodoList.entries(list, ~D[2018-01-01])
-    assert [] == TodoList.entries(list, ~D[2015-01-03])
+    assert [] == TodoList.entries(list, ~D[2018-01-03])
   end
 
   test_script "todo_import" do
     list = TodoList.CsvImporter.import("#{__DIR__}/../todos.csv")
-    assert [%{date: ~D[2013-12-20], id: 2, title: "Shopping"}] == TodoList.entries(list, ~D[2013-12-20])
+    assert [%{date: ~D[2018-12-20], id: 2, title: "Shopping"}] == TodoList.entries(list, ~D[2018-12-20])
   end
 end
