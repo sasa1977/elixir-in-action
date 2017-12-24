@@ -84,10 +84,13 @@ defmodule TodoList.CsvImporter do
   end
 
   defp parse_date(date_string) do
-    date_string
-    |> String.split("/")
-    |> Enum.map(&String.to_integer/1)
-    |> List.to_tuple()
+    [year, month, day] =
+      date_string
+      |> String.split("/")
+      |> Enum.map(&String.to_integer/1)
+
+    {:ok, date} = Date.new(year, month, day)
+    date
   end
 
   defp create_entry({date, title}) do

@@ -14,65 +14,65 @@ defmodule Test do
   test_script "simple_todo" do
     list =
       TodoList.new
-      |> TodoList.add_entry({2015, 1, 1}, "Dinner")
-      |> TodoList.add_entry({2015, 1, 2}, "Dentist")
+      |> TodoList.add_entry(~D[2018-01-01], "Dinner")
+      |> TodoList.add_entry(~D[2018-01-02], "Dentist")
 
-    assert ["Dinner"] == TodoList.entries(list, {2015, 1, 1})
-    assert [] == TodoList.entries(list, {2015, 1, 3})
+    assert ["Dinner"] == TodoList.entries(list, ~D[2018-01-01])
+    assert [] == TodoList.entries(list, ~D[2015-01-03])
   end
 
   test_script "todo_multi_dict" do
     list =
       TodoList.new
-      |> TodoList.add_entry({2015, 1, 1}, "Dinner")
-      |> TodoList.add_entry({2015, 1, 2}, "Dentist")
-      |> TodoList.add_entry({2015, 1, 2}, "Meeting")
+      |> TodoList.add_entry(~D[2018-01-01], "Dinner")
+      |> TodoList.add_entry(~D[2018-01-02], "Dentist")
+      |> TodoList.add_entry(~D[2018-01-02], "Meeting")
 
-    assert ["Meeting", "Dentist"] == TodoList.entries(list, {2015, 1, 2})
-    assert [] == TodoList.entries(list, {2015, 1, 3})
+    assert ["Meeting", "Dentist"] == TodoList.entries(list, ~D[2018-01-02])
+    assert [] == TodoList.entries(list, ~D[2015-01-03])
   end
 
   test_script "todo_entry_map" do
     list =
       TodoList.new
-      |> TodoList.add_entry(%{date: {2015, 1, 1}, title: "Dinner"})
-      |> TodoList.add_entry(%{date: {2015, 1, 2}, title: "Dentist"})
-      |> TodoList.add_entry(%{date: {2015, 1, 2}, title: "Meeting"})
+      |> TodoList.add_entry(%{date: ~D[2018-01-01], title: "Dinner"})
+      |> TodoList.add_entry(%{date: ~D[2018-01-02], title: "Dentist"})
+      |> TodoList.add_entry(%{date: ~D[2018-01-02], title: "Meeting"})
 
-    assert [%{date: {2015, 1, 1}, title: "Dinner"}] == TodoList.entries(list, {2015, 1, 1})
-    assert [] == TodoList.entries(list, {2015, 1, 3})
+    assert [%{date: ~D[2018-01-01], title: "Dinner"}] == TodoList.entries(list, ~D[2018-01-01])
+    assert [] == TodoList.entries(list, ~D[2015-01-03])
   end
 
   test_script "todo_crud" do
     list =
       TodoList.new
-      |> TodoList.add_entry(%{date: {2015, 1, 1}, title: "Dinner"})
-      |> TodoList.add_entry(%{date: {2015, 1, 2}, title: "Dentist"})
-      |> TodoList.add_entry(%{date: {2015, 1, 2}, title: "Meeting"})
+      |> TodoList.add_entry(%{date: ~D[2018-01-01], title: "Dinner"})
+      |> TodoList.add_entry(%{date: ~D[2018-01-02], title: "Dentist"})
+      |> TodoList.add_entry(%{date: ~D[2018-01-02], title: "Meeting"})
 
-    assert [%{date: {2015, 1, 1}, id: 1, title: "Updated"}] ==
+    assert [%{date: ~D[2018-01-01], id: 1, title: "Updated"}] ==
       list
       |> TodoList.update_entry(1, fn(entry) -> %{entry | title: "Updated"} end)
-      |> TodoList.entries({2015, 1, 1})
+      |> TodoList.entries(~D[2018-01-01])
 
     assert [] ==
       list
       |> TodoList.delete_entry(1)
-      |> TodoList.entries({2015, 1, 1})
+      |> TodoList.entries(~D[2018-01-01])
   end
 
   test_script "todo_builder" do
     list = TodoList.new([
-      %{date: {2015, 1, 1}, title: "Dinner"},
-      %{date: {2015, 1, 2}, title: "Dentist"},
-      %{date: {2015, 1, 2}, title: "Meeting"}
+      %{date: ~D[2018-01-01], title: "Dinner"},
+      %{date: ~D[2018-01-02], title: "Dentist"},
+      %{date: ~D[2018-01-02], title: "Meeting"}
     ])
-    assert [%{date: {2015, 1, 1}, id: 1, title: "Dinner"}] == TodoList.entries(list, {2015, 1, 1})
-    assert [] == TodoList.entries(list, {2015, 1, 3})
+    assert [%{date: ~D[2018-01-01], id: 1, title: "Dinner"}] == TodoList.entries(list, ~D[2018-01-01])
+    assert [] == TodoList.entries(list, ~D[2015-01-03])
   end
 
   test_script "todo_import" do
     list = TodoList.CsvImporter.import("#{__DIR__}/../todos.csv")
-    assert [%{date: {2013, 12, 20}, id: 2, title: "Shopping"}] == TodoList.entries(list, {2013, 12, 20})
+    assert [%{date: ~D[2013-12-20], id: 2, title: "Shopping"}] == TodoList.entries(list, ~D[2013-12-20])
   end
 end
