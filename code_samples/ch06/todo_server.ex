@@ -13,9 +13,8 @@ defmodule TodoServer do
     GenServer.call(todo_server, {:entries, date})
   end
 
-
   def init(_) do
-    {:ok, TodoList.new}
+    {:ok, TodoList.new()}
   end
 
   def handle_cast({:add_entry, new_entry}, todo_list) do
@@ -32,8 +31,6 @@ defmodule TodoServer do
   end
 end
 
-
-
 defmodule TodoList do
   defstruct auto_id: 1, entries: %{}
 
@@ -49,10 +46,7 @@ defmodule TodoList do
     entry = Map.put(entry, :id, todo_list.auto_id)
     new_entries = Map.put(todo_list.entries, todo_list.auto_id, entry)
 
-    %TodoList{todo_list |
-      entries: new_entries,
-      auto_id: todo_list.auto_id + 1
-    }
+    %TodoList{todo_list | entries: new_entries, auto_id: todo_list.auto_id + 1}
   end
 
   def entries(todo_list, date) do
@@ -62,7 +56,7 @@ defmodule TodoList do
   end
 
   def update_entry(todo_list, %{} = new_entry) do
-    update_entry(todo_list, new_entry.id, fn(_) -> new_entry end)
+    update_entry(todo_list, new_entry.id, fn _ -> new_entry end)
   end
 
   def update_entry(todo_list, entry_id, updater_fun) do
