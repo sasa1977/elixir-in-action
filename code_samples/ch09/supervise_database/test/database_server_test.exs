@@ -36,7 +36,6 @@ defmodule MockTodo.DatabaseWorker do
     GenServer.call(worker_pid, {:get, key})
   end
 
-
   def init(state) do
     {:ok, state}
   end

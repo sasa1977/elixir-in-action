@@ -18,7 +18,9 @@ defmodule PageCache do
       nil ->
         response = fun.()
         {:reply, response, Map.put(cache, key, response)}
-      response -> {:reply, response, cache}
+
+      response ->
+        {:reply, response, cache}
     end
   end
 end

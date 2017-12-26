@@ -2,9 +2,11 @@ defmodule Todo.Server do
   use GenServer
 
   def start_link(name) do
-    IO.puts "Starting to-do server for #{name}"
+    IO.puts("Starting to-do server for #{name}")
+
     GenServer.start_link(
-      Todo.Server, name,
+      Todo.Server,
+      name,
       name: {:global, {:todo_server, name}}
     )
   end
@@ -22,11 +24,9 @@ defmodule Todo.Server do
     :global.whereis_name({:todo_server, name})
   end
 
-
   def init(name) do
-    {:ok, {name, Todo.Database.get(name) || Todo.List.new}}
+    {:ok, {name, Todo.Database.get(name) || Todo.List.new()}}
   end
-
 
   def handle_call({:add_entry, new_entry}, _, {name, todo_list}) do
     todo_list = Todo.List.add_entry(todo_list, new_entry)

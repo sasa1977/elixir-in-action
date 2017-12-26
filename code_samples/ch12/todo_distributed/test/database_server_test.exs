@@ -39,7 +39,6 @@ defmodule MockTodo.DatabaseWorker do
     :"database_worker_#{worker_id}"
   end
 
-
   def init(state) do
     {:ok, state}
   end

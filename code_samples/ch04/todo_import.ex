@@ -13,10 +13,7 @@ defmodule TodoList do
     entry = Map.put(entry, :id, todo_list.auto_id)
     new_entries = Map.put(todo_list.entries, todo_list.auto_id, entry)
 
-    %TodoList{todo_list |
-      entries: new_entries,
-      auto_id: todo_list.auto_id + 1
-    }
+    %TodoList{todo_list | entries: new_entries, auto_id: todo_list.auto_id + 1}
   end
 
   def entries(todo_list, date) do

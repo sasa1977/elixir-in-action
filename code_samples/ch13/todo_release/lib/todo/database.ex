@@ -8,9 +8,12 @@ defmodule Todo.Database do
   def store(key, data) do
     {_results, bad_nodes} =
       :rpc.multicall(
-        __MODULE__, :store_local, [key, data],
+        __MODULE__,
+        :store_local,
+        [key, data],
         :timer.seconds(5)
       )
+
     Enum.each(bad_nodes, &IO.puts("Store failed on node #{&1}"))
     :ok
   end

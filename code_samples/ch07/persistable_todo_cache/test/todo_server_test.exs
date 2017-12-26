@@ -3,8 +3,8 @@ defmodule TodoServerTest do
 
   setup do
     :meck.new(Todo.Database, [:no_link])
-    :meck.expect(Todo.Database, :get, fn(_) -> nil end)
-    :meck.expect(Todo.Database, :store, fn(_, _) -> :ok end)
+    :meck.expect(Todo.Database, :get, fn _ -> nil end)
+    :meck.expect(Todo.Database, :store, fn _, _ -> :ok end)
 
     {:ok, todo_server} = Todo.Server.start("test_list")
 
@@ -16,12 +16,15 @@ defmodule TodoServerTest do
     {:ok, todo_server: todo_server}
   end
 
-
   test "add_entry", context do
     assert([] == Todo.Server.entries(context[:todo_server], ~D[2018-12-19]))
 
     Todo.Server.add_entry(context[:todo_server], %{date: ~D[2018-12-19], title: "Dentist"})
     assert(1 == Todo.Server.entries(context[:todo_server], ~D[2018-12-19]) |> length)
-    assert("Dentist" == (Todo.Server.entries(context[:todo_server], ~D[2018-12-19]) |> Enum.at(0)).title)
+
+    assert(
+      "Dentist" ==
+        (Todo.Server.entries(context[:todo_server], ~D[2018-12-19]) |> Enum.at(0)).title
+    )
   end
 end

@@ -6,8 +6,7 @@ defmodule EtsPageCache do
   end
 
   def cached(key, fun) do
-    read_cached(key) ||
-      GenServer.call(:ets_page_cache, {:cached, key, fun})
+    read_cached(key) || GenServer.call(:ets_page_cache, {:cached, key, fun})
   end
 
   defp read_cached(key) do

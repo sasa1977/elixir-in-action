@@ -17,4 +17,4 @@ File.mkdir_p("./persist")
 # 
 # This runs a benchmark for 120 seconds, using 4 threads, keeping 100 HTTP connections open,
 # timing out the request after 2 seconds, and evaluating wrk.lua to generate URLs.
-:os.cmd('wrk -t4 -c100 -d120s --timeout 2s -s wrk.lua "http://localhost:5454"') |> IO.puts
+:os.cmd('wrk -t4 -c100 -d120s --timeout 2s -s wrk.lua "http://localhost:5454"') |> IO.puts()

@@ -2,7 +2,7 @@ defmodule DatabaseWorkerTest do
   use ExUnit.Case, async: false
 
   setup do
-    Todo.ProcessRegistry.start_link
+    Todo.ProcessRegistry.start_link()
     {:ok, worker} = Todo.DatabaseWorker.start_link("./test_persist", 1)
 
     on_exit(fn ->

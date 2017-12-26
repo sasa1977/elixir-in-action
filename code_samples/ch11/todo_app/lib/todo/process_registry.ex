@@ -2,7 +2,7 @@ defmodule Todo.ProcessRegistry do
   use GenServer
 
   def start_link do
-    IO.puts "Starting process registry"
+    IO.puts("Starting process registry")
     GenServer.start_link(__MODULE__, nil, name: :process_registry)
   end
 
@@ -16,26 +16,26 @@ defmodule Todo.ProcessRegistry do
 
   def whereis_name(key) do
     case :ets.lookup(:process_registry, key) do
-      [{^key, pid}] -> pid;
+      [{^key, pid}] -> pid
       _ -> :undefined
     end
   end
 
   def send(key, message) do
     case whereis_name(key) do
-      :undefined -> {:badarg, {key, message}}
+      :undefined ->
+        {:badarg, {key, message}}
+
       pid ->
         Kernel.send(pid, message)
         pid
     end
   end
 
-
   def init(_) do
     :ets.new(:process_registry, [:named_table, :protected, :set])
     {:ok, nil}
   end
-
 
   def handle_call({:register_name, key, pid}, _, state) do
     if whereis_name(key) != :undefined do
@@ -51,7 +51,6 @@ defmodule Todo.ProcessRegistry do
     :ets.delete(:process_registry, key)
     {:reply, key, state}
   end
-
 
   def handle_info({:DOWN, _, :process, terminated_pid, _}, state) do
     :ets.match_delete(:process_registry, {:_, terminated_pid})

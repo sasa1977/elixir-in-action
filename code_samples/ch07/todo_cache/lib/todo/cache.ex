@@ -9,7 +9,6 @@ defmodule Todo.Cache do
     GenServer.call(cache_pid, {:server_process, todo_list_name})
   end
 
-
   def init(_) do
     {:ok, %{}}
   end
@@ -20,7 +19,7 @@ defmodule Todo.Cache do
         {:reply, todo_server, todo_servers}
 
       :error ->
-        {:ok, new_server} = Todo.Server.start
+        {:ok, new_server} = Todo.Server.start()
 
         {
           :reply,

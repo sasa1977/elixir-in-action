@@ -17,10 +17,7 @@ defmodule Todo.List do
     entry = Map.put(entry, :id, todo_list.auto_id)
     new_entries = Map.put(todo_list.entries, todo_list.auto_id, entry)
 
-    %Todo.List{todo_list |
-      entries: new_entries,
-      auto_id: todo_list.auto_id + 1
-    }
+    %Todo.List{todo_list | entries: new_entries, auto_id: todo_list.auto_id + 1}
   end
 
   def entries(todo_list, date) do
@@ -30,7 +27,7 @@ defmodule Todo.List do
   end
 
   def update_entry(todo_list, %{} = new_entry) do
-    update_entry(todo_list, new_entry.id, fn(_) -> new_entry end)
+    update_entry(todo_list, new_entry.id, fn _ -> new_entry end)
   end
 
   def update_entry(todo_list, entry_id, updater_fun) do

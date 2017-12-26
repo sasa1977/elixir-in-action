@@ -3,6 +3,7 @@ defmodule DatabaseServerTest do
 
   setup do
     Todo.Database.start("./test_persist")
+
     on_exit(fn ->
       File.rm_rf("./test_persist/")
       send(:database_server, :stop)

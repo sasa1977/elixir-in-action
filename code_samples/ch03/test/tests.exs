@@ -40,7 +40,7 @@ defmodule Test do
     assert 3 == Loop.list_len([1, 2, 3])
 
     assert [] == Loop.range(3, 2)
-    assert [2,3,4] == Loop.range(2,4)
+    assert [2, 3, 4] == Loop.range(2, 4)
 
     assert [] == Loop.positive([])
     assert [] == Loop.positive([-1, -2])
@@ -52,7 +52,7 @@ defmodule Test do
     assert 3 == Loop.list_len([1, 2, 3])
 
     assert [] == Loop.range(3, 2)
-    assert [2,3,4] == Loop.range(2,4)
+    assert [2, 3, 4] == Loop.range(2, 4)
 
     assert [] == Loop.positive([])
     assert [] == Loop.positive([-1, -2])
@@ -86,14 +86,24 @@ defmodule Test do
   test_script "user_extraction" do
     assert {:error, "login missing"} == UserExtraction.extract_user(%{})
     assert {:error, "email missing"} == UserExtraction.extract_user(%{"login" => "a"})
-    assert {:error, "password missing"} == UserExtraction.extract_user(%{"login" => "a", "email" => "b"})
-    assert {:ok, %{email: "b", login: "a", password: "c"}} == UserExtraction.extract_user(%{"login" => "a", "email" => "b", "password" => "c"})
+
+    assert {:error, "password missing"} ==
+             UserExtraction.extract_user(%{"login" => "a", "email" => "b"})
+
+    assert {:ok, %{email: "b", login: "a", password: "c"}} ==
+             UserExtraction.extract_user(%{"login" => "a", "email" => "b", "password" => "c"})
   end
 
   test_script "user_extraction_2" do
     assert {:error, "missing fields: login, email, password"} == UserExtraction.extract_user(%{})
-    assert {:error, "missing fields: email, password"} == UserExtraction.extract_user(%{"login" => "a"})
-    assert {:error, "missing fields: password"} == UserExtraction.extract_user(%{"login" => "a", "email" => "b"})
-    assert {:ok, %{email: "b", login: "a", password: "c"}} == UserExtraction.extract_user(%{"login" => "a", "email" => "b", "password" => "c"})
+
+    assert {:error, "missing fields: email, password"} ==
+             UserExtraction.extract_user(%{"login" => "a"})
+
+    assert {:error, "missing fields: password"} ==
+             UserExtraction.extract_user(%{"login" => "a", "email" => "b"})
+
+    assert {:ok, %{email: "b", login: "a", password: "c"}} ==
+             UserExtraction.extract_user(%{"login" => "a", "email" => "b", "password" => "c"})
   end
 end

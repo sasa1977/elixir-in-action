@@ -2,7 +2,7 @@ defmodule Todo.Database do
   use GenServer
 
   def start_link(db_folder) do
-    IO.puts "Starting database server."
+    IO.puts("Starting database server.")
 
     GenServer.start_link(__MODULE__, db_folder, name: :database_server)
   end
@@ -23,7 +23,6 @@ defmodule Todo.Database do
     GenServer.call(:database_server, {:choose_worker, key})
   end
 
-
   def init(db_folder) do
     {:ok, start_workers(db_folder)}
   end
@@ -43,10 +42,11 @@ defmodule Todo.Database do
   # Needed for testing purposes
   def handle_info(:stop, workers) do
     workers
-    |> Map.values
+    |> Map.values()
     |> Enum.each(&send(&1, :stop))
 
     {:stop, :normal, %{}}
   end
+
   def handle_info(_, state), do: {:noreply, state}
 end

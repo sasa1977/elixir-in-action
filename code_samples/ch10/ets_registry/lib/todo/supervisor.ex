@@ -12,6 +12,7 @@ defmodule Todo.Supervisor do
       worker(Todo.ProcessRegistry, []),
       supervisor(Todo.SystemSupervisor, [])
     ]
+
     supervise(processes, strategy: :rest_for_one)
   end
 end

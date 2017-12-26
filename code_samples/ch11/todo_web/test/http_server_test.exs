@@ -8,24 +8,27 @@ defmodule HttpServerTest do
     {:ok, apps} = Application.ensure_all_started(:todo)
 
     # We also need to start HTTPoison
-    HTTPoison.start
+    HTTPoison.start()
 
-    on_exit fn ->
+    on_exit(fn ->
       # When the test is finished, we'll stop all application we started.
       Enum.each(apps, &Application.stop/1)
-    end
+    end)
 
     :ok
   end
 
   test "http server" do
     assert %HTTPoison.Response{body: "", status_code: 200} =
-      HTTPoison.get!("http://127.0.0.1:5454/entries?list=test&date=20181219")
+             HTTPoison.get!("http://127.0.0.1:5454/entries?list=test&date=20181219")
 
     assert %HTTPoison.Response{body: "OK", status_code: 200} =
-      HTTPoison.post!("http://127.0.0.1:5454/add_entry?list=test&date=20181219&title=Dentist", "")
+             HTTPoison.post!(
+               "http://127.0.0.1:5454/add_entry?list=test&date=20181219&title=Dentist",
+               ""
+             )
 
     assert %HTTPoison.Response{body: "2018-12-19    Dentist", status_code: 200} =
-      HTTPoison.get!("http://127.0.0.1:5454/entries?list=test&date=20181219")
+             HTTPoison.get!("http://127.0.0.1:5454/entries?list=test&date=20181219")
   end
 end

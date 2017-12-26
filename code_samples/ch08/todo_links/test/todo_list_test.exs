@@ -2,7 +2,7 @@ defmodule TodoListTest do
   use ExUnit.Case, async: true
 
   test "empty list" do
-    assert(0 == Todo.List.size(Todo.List.new))
+    assert(0 == Todo.List.size(Todo.List.new()))
   end
 
   test "add_entry" do
@@ -24,10 +24,9 @@ defmodule TodoListTest do
     assert(3 == Todo.List.size(updated_list))
     assert("Updated shopping" == shopping_entry(updated_list).title)
 
-
     not_modified_list =
       sample_todo_list()
-      |> Todo.List.update_entry(-1, fn(_) -> flunk("shouldn't happen") end)
+      |> Todo.List.update_entry(-1, fn _ -> flunk("shouldn't happen") end)
 
     assert(sample_todo_list() == not_modified_list)
   end
@@ -40,7 +39,7 @@ defmodule TodoListTest do
   end
 
   defp sample_todo_list do
-    Todo.List.new
+    Todo.List.new()
     |> Todo.List.add_entry(%{date: ~D[2018-12-19], title: "Dentist"})
     |> Todo.List.add_entry(%{date: ~D[2018-12-20], title: "Shopping"})
     |> Todo.List.add_entry(%{date: ~D[2018-12-19], title: "Movies"})

@@ -10,6 +10,7 @@ defmodule Todo.Supervisor do
       supervisor(Todo.Database, ["./persist/"]),
       supervisor(Todo.ServerSupervisor, [])
     ]
+
     supervise(processes, strategy: :one_for_one)
   end
 end
