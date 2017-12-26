@@ -36,11 +36,7 @@ defmodule Todo.Database do
   end
 
   def handle_call({:choose_worker, key}, _, workers) do
-    worker_key =
-      key
-      |> :erlang.phash2
-      |> rem(3)
-
+    worker_key = :erlang.phash2(key, 3)
     {:reply, Map.get(workers, worker_key), workers}
   end
 

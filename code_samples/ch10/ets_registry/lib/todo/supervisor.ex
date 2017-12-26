@@ -1,3 +1,5 @@
+# Top-level supervisor
+
 defmodule Todo.Supervisor do
   use Supervisor
 

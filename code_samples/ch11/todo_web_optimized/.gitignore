@@ -1,6 +1,0 @@
-/_build
-/deps
-erl_crash.dump
-*.ez
-/persist/
-/Mnesia.nonode@nohost/
