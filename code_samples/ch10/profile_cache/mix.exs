@@ -1,25 +1,22 @@
-defmodule ProfileCache.Mixfile do
+defmodule ProfileCache.MixProject do
   use Mix.Project
 
   def project do
-    [app: :profile_cache,
-     version: "0.0.1",
-     elixir: "~> 1.0",
-     deps: deps()]
+    [
+      app: :profile_cache,
+      version: "0.1.0",
+      elixir: "~> 1.6-rc",
+      start_permanent: Mix.env() == :prod,
+      deps: deps()
+    ]
   end
 
-  # Configuration for the OTP application
-  #
-  # Type `mix help compile.app` for more information
   def application do
-    [ applications: [] ]
+    [
+      extra_applications: [:logger]
+    ]
   end
 
-  # List all dependencies in the format:
-  #
-  # { :foobar, git: "https://github.com/elixir-lang/foobar.git", tag: "0.1" }
-  #
-  # Type `mix help deps` for more examples and options
   defp deps do
     []
   end
