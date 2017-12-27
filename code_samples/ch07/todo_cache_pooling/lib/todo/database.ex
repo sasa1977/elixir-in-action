@@ -7,13 +7,13 @@ defmodule Todo.Database do
 
   def store(key, data) do
     key
-    |> choose_worker
+    |> choose_worker()
     |> Todo.DatabaseWorker.store(key, data)
   end
 
   def get(key) do
     key
-    |> choose_worker
+    |> choose_worker()
     |> Todo.DatabaseWorker.get(key)
   end
 
@@ -41,13 +41,9 @@ defmodule Todo.Database do
   end
 
   # Needed for testing purposes
-  def handle_info(:stop, workers) do
+  def terminate(_reason, workers) do
     workers
     |> Map.values()
-    |> Enum.each(&send(&1, :stop))
-
-    {:stop, :normal, %{}}
+    |> Enum.each(&GenServer.stop/1)
   end
-
-  def handle_info(_, state), do: {:noreply, state}
 end

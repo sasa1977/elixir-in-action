@@ -1,6 +1,8 @@
 # Very quick, inconclusive load test
+#
 # Start from command line with:
-#   iex --erl "+P 2000000" -S mix run -e LoadTest.run
+#   elixir --erl "+P 2000000" -S mix run -e LoadTest.run
+#
 # Note: the +P 2000000 sets maximum number of processes to 2 millions
 defmodule LoadTest do
   @total_processes 1_000_000
@@ -10,9 +12,7 @@ defmodule LoadTest do
     {:ok, cache} = Todo.Cache.start()
 
     interval_count = round(@total_processes / @interval_size)
-
-    0..(interval_count - 1)
-    |> Enum.each(&run_interval(cache, make_interval(&1)))
+    Enum.each(0..(interval_count - 1), &run_interval(cache, make_interval(&1)))
   end
 
   defp make_interval(n) do

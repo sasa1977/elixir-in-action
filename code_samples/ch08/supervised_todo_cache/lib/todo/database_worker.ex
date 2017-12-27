@@ -21,7 +21,8 @@ defmodule Todo.DatabaseWorker do
   end
 
   def handle_cast({:store, key, data}, db_folder) do
-    file_name(db_folder, key)
+    db_folder
+    |> file_name(key)
     |> File.write!(:erlang.term_to_binary(data))
 
     {:noreply, db_folder}
@@ -37,9 +38,7 @@ defmodule Todo.DatabaseWorker do
     {:reply, data, db_folder}
   end
 
-  # Needed for testing purposes
-  def handle_info(:stop, state), do: {:stop, :normal, state}
-  def handle_info(_, state), do: {:noreply, state}
-
-  defp file_name(db_folder, key), do: "#{db_folder}/#{key}"
+  defp file_name(db_folder, key) do
+    Path.join(db_folder, to_string(key))
+  end
 end

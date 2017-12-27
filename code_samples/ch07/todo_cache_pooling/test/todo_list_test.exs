@@ -7,9 +7,9 @@ defmodule TodoListTest do
 
   test "add_entry" do
     assert(3 == Todo.List.size(sample_todo_list()))
-    assert(2 == sample_todo_list() |> Todo.List.entries(~D[2018-12-19]) |> length)
-    assert(1 == sample_todo_list() |> Todo.List.entries(~D[2018-12-20]) |> length)
-    assert(0 == sample_todo_list() |> Todo.List.entries(~D[2018-12-22]) |> length)
+    assert(2 == sample_todo_list() |> Todo.List.entries(~D[2018-12-19]) |> length())
+    assert(1 == sample_todo_list() |> Todo.List.entries(~D[2018-12-20]) |> length())
+    assert(0 == sample_todo_list() |> Todo.List.entries(~D[2018-12-22]) |> length())
 
     assert(2 == shopping_entry().id)
     assert(~D[2018-12-20] == shopping_entry().date)
@@ -35,7 +35,7 @@ defmodule TodoListTest do
     deleted_list = Todo.List.delete_entry(sample_todo_list(), shopping_entry().id)
 
     assert(2 == Todo.List.size(deleted_list))
-    assert(0 == deleted_list |> Todo.List.entries(~D[2018-12-20]) |> length)
+    assert(0 == deleted_list |> Todo.List.entries(~D[2018-12-20]) |> length())
   end
 
   defp sample_todo_list do

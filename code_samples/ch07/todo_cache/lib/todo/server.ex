@@ -29,8 +29,4 @@ defmodule Todo.Server do
       todo_list
     }
   end
-
-  # Needed for testing purposes
-  def handle_info(:stop, todo_list), do: {:stop, :normal, todo_list}
-  def handle_info(_, state), do: {:noreply, state}
 end

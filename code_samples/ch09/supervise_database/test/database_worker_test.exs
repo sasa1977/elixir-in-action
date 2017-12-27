@@ -6,7 +6,6 @@ defmodule DatabaseWorkerTest do
 
     on_exit(fn ->
       File.rm_rf("./test_persist/")
-      send(worker, :stop)
     end)
 
     {:ok, worker: worker}

@@ -6,7 +6,7 @@ defmodule DatabaseServerTest do
 
     on_exit(fn ->
       File.rm_rf("./test_persist/")
-      send(:database_server, :stop)
+      GenServer.stop(:database_server)
     end)
   end
 

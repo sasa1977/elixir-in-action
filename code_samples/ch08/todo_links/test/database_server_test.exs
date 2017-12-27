@@ -41,14 +41,10 @@ defmodule MockTodo.DatabaseWorker do
   end
 
   def handle_call({:store, _, _}, _, state) do
-    {:reply, self, state}
+    {:reply, self(), state}
   end
 
   def handle_call({:get, _}, _, state) do
-    {:reply, self, state}
+    {:reply, self(), state}
   end
-
-  # Needed for testing purposes
-  def handle_info(:stop, state), do: {:stop, :normal, state}
-  def handle_info(_, state), do: {:noreply, state}
 end

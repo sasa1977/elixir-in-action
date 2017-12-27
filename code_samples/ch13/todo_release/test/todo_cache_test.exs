@@ -20,6 +20,6 @@ defmodule TodoCacheTest do
     assert(bobs_list != alices_list)
     assert(bobs_list == Todo.Cache.server_process("bobs_list"))
 
-    Process.exit(Process.whereis(:todo_server_supervisor), :normal)
+    Process.exit(Process.whereis(:todo_server_supervisor), :shutdown)
   end
 end

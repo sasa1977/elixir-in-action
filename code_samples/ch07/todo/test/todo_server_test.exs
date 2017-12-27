@@ -3,7 +3,7 @@ defmodule TodoServerTest do
 
   setup do
     {:ok, todo_server} = Todo.Server.start()
-    on_exit(fn -> send(todo_server, :stop) end)
+    on_exit(fn -> GenServer.stop(todo_server) end)
     {:ok, todo_server: todo_server}
   end
 

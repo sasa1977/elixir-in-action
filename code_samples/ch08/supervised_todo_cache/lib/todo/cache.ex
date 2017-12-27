@@ -31,8 +31,4 @@ defmodule Todo.Cache do
         }
     end
   end
-
-  # Needed for testing purposes
-  def handle_info(:stop, state), do: {:stop, :normal, state}
-  def handle_info(_, state), do: {:noreply, state}
 end

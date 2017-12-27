@@ -7,13 +7,13 @@ defmodule Todo.Database do
 
   def store(key, data) do
     key
-    |> choose_worker
+    |> choose_worker()
     |> Todo.DatabaseWorker.store(key, data)
   end
 
   def get(key) do
     key
-    |> choose_worker
+    |> choose_worker()
     |> Todo.DatabaseWorker.get(key)
   end
 

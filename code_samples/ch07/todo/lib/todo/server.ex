@@ -2,7 +2,7 @@ defmodule Todo.Server do
   use GenServer
 
   def start do
-    GenServer.start(Todo.Server, nil)
+    GenServer.start(__MODULE__, nil)
   end
 
   def add_entry(todo_server, new_entry) do
@@ -29,8 +29,4 @@ defmodule Todo.Server do
       todo_list
     }
   end
-
-  # Needed for testing purposes
-  def handle_info(:stop, todo_list), do: {:stop, :normal, todo_list}
-  def handle_info(_, state), do: {:noreply, state}
 end

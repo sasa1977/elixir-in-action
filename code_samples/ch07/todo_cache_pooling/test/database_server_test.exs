@@ -10,7 +10,7 @@ defmodule DatabaseServerTest do
 
     on_exit(fn ->
       File.rm_rf("./test_persist/")
-      send(:database_server, :stop)
+      GenServer.stop(:database_server)
       :meck.unload(Todo.DatabaseWorker)
     end)
   end
@@ -42,14 +42,10 @@ defmodule MockTodo.DatabaseWorker do
   end
 
   def handle_call({:store, _, _}, _, state) do
-    {:reply, self, state}
+    {:reply, self(), state}
   end
 
   def handle_call({:get, _}, _, state) do
-    {:reply, self, state}
+    {:reply, self(), state}
   end
-
-  # Needed for testing purposes
-  def handle_info(:stop, state), do: {:stop, :normal, state}
-  def handle_info(_, state), do: {:noreply, state}
 end

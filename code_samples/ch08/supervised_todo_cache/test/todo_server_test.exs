@@ -10,7 +10,7 @@ defmodule TodoServerTest do
 
     on_exit(fn ->
       :meck.unload(Todo.Database)
-      send(todo_server, :stop)
+      GenServer.stop(todo_server)
     end)
 
     {:ok, todo_server: todo_server}

@@ -51,8 +51,4 @@ defmodule MockTodo.DatabaseWorker do
   def handle_call({:get, key}, _, state) do
     {:reply, Process.get(key), state}
   end
-
-  # Needed for testing purposes
-  def handle_info(:stop, state), do: {:stop, :normal, state}
-  def handle_info(_, state), do: {:noreply, state}
 end

@@ -6,7 +6,7 @@ defmodule DatabaseWorkerTest do
 
     on_exit(fn ->
       File.rm_rf("./test_persist/")
-      send(worker, :stop)
+      GenServer.stop(worker)
     end)
 
     {:ok, worker: worker}

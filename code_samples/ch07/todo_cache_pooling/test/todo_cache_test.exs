@@ -17,6 +17,6 @@ defmodule TodoCacheTest do
     assert(bobs_list != alices_list)
     assert(bobs_list == Todo.Cache.server_process(cache, "bobs_list"))
 
-    send(cache, :stop)
+    GenServer.stop(cache)
   end
 end
