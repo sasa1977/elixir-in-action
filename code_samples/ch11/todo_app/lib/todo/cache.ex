@@ -17,10 +17,12 @@ defmodule Todo.Cache do
     end
   end
 
+  @impl GenServer
   def init(_) do
     {:ok, nil}
   end
 
+  @impl GenServer
   def handle_call({:server_process, todo_list_name}, _, state) do
     todo_server_pid =
       case Todo.Server.whereis(todo_list_name) do

@@ -24,16 +24,19 @@ defmodule Todo.Server do
     :global.whereis_name({:todo_server, name})
   end
 
+  @impl GenServer
   def init(name) do
     {:ok, {name, Todo.Database.get(name) || Todo.List.new()}}
   end
 
+  @impl GenServer
   def handle_call({:add_entry, new_entry}, _, {name, todo_list}) do
     todo_list = Todo.List.add_entry(todo_list, new_entry)
     Todo.Database.store(name, todo_list)
     {:reply, :ok, {name, todo_list}}
   end
 
+  @impl GenServer
   def handle_call({:entries, date}, _, {name, todo_list}) do
     {
       :reply,

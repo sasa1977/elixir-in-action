@@ -24,6 +24,7 @@ defmodule Todo.DatabaseWorker do
     {:via, :gproc, {:n, :l, {:database_worker, worker_id}}}
   end
 
+  @impl GenServer
   def init(db_folder) do
     # Node name is used to determine the database folder. This allows us to
     # start multiple nodes from the same folders, and data will not clash.
@@ -34,6 +35,7 @@ defmodule Todo.DatabaseWorker do
     {:ok, db_folder}
   end
 
+  @impl GenServer
   def handle_call({:store, key, data}, _, db_folder) do
     db_folder
     |> file_name(key)
@@ -42,6 +44,7 @@ defmodule Todo.DatabaseWorker do
     {:reply, :ok, db_folder}
   end
 
+  @impl GenServer
   def handle_call({:get, key}, _, db_folder) do
     data =
       case File.read(file_name(db_folder, key)) do

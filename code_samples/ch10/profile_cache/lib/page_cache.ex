@@ -9,10 +9,12 @@ defmodule PageCache do
     GenServer.call(:page_cache, {:cached, key, fun})
   end
 
+  @impl GenServer
   def init(_) do
     {:ok, %{}}
   end
 
+  @impl GenServer
   def handle_call({:cached, key, fun}, _, cache) do
     case Map.get(cache, key) do
       nil ->

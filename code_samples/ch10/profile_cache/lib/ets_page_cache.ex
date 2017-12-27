@@ -16,11 +16,13 @@ defmodule EtsPageCache do
     end
   end
 
+  @impl GenServer
   def init(_) do
     :ets.new(:ets_page_cache, [:set, :named_table, :protected])
     {:ok, nil}
   end
 
+  @impl GenServer
   def handle_call({:cached, key, fun}, _, state) do
     {:reply, read_cached(key) || cache_response(key, fun), state}
   end

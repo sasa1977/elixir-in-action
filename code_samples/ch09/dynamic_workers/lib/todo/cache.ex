@@ -18,10 +18,12 @@ defmodule Todo.Cache do
     end
   end
 
+  @impl GenServer
   def init(_) do
     {:ok, nil}
   end
 
+  @impl GenServer
   def handle_call({:server_process, todo_list_name}, _, state) do
     # We need to recheck once again if the server exists.
     todo_server_pid =

@@ -13,11 +13,13 @@ defmodule Todo.Database do
     GenServer.call(:database_server, {:get, key})
   end
 
+  @impl GenServer
   def init(db_folder) do
     File.mkdir_p!(db_folder)
     {:ok, db_folder}
   end
 
+  @impl GenServer
   def handle_cast({:store, key, data}, db_folder) do
     db_folder
     |> file_name(key)
@@ -26,6 +28,7 @@ defmodule Todo.Database do
     {:noreply, db_folder}
   end
 
+  @impl GenServer
   def handle_call({:get, key}, _, db_folder) do
     data =
       case File.read(file_name(db_folder, key)) do

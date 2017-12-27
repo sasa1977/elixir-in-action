@@ -23,8 +23,23 @@ defmodule Todo.Database do
     GenServer.call(:database_server, {:choose_worker, key})
   end
 
+  @impl GenServer
   def init(db_folder) do
     {:ok, start_workers(db_folder)}
+  end
+
+  @impl GenServer
+  def handle_call({:choose_worker, key}, _, workers) do
+    worker_key = :erlang.phash2(key, 3)
+    {:reply, Map.get(workers, worker_key), workers}
+  end
+
+  # Needed for testing purposes
+  @impl GenServer
+  def terminate(_reason, workers) do
+    workers
+    |> Map.values()
+    |> Enum.each(&GenServer.stop/1)
   end
 
   defp start_workers(db_folder) do
@@ -32,17 +47,5 @@ defmodule Todo.Database do
       {:ok, pid} = Todo.DatabaseWorker.start(db_folder)
       {index - 1, pid}
     end
-  end
-
-  def handle_call({:choose_worker, key}, _, workers) do
-    worker_key = :erlang.phash2(key, 3)
-    {:reply, Map.get(workers, worker_key), workers}
-  end
-
-  # Needed for testing purposes
-  def terminate(_reason, workers) do
-    workers
-    |> Map.values()
-    |> Enum.each(&GenServer.stop/1)
   end
 end

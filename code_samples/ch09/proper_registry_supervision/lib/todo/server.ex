@@ -22,16 +22,19 @@ defmodule Todo.Server do
     {:via, Todo.ProcessRegistry, {:todo_server, name}}
   end
 
+  @impl GenServer
   def init(name) do
     {:ok, {name, Todo.Database.get(name) || Todo.List.new()}}
   end
 
+  @impl GenServer
   def handle_cast({:add_entry, new_entry}, {name, todo_list}) do
     new_state = Todo.List.add_entry(todo_list, new_entry)
     Todo.Database.store(name, new_state)
     {:noreply, {name, new_state}}
   end
 
+  @impl GenServer
   def handle_call({:entries, date}, _, {name, todo_list}) do
     {
       :reply,

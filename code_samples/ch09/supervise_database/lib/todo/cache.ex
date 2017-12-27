@@ -11,10 +11,12 @@ defmodule Todo.Cache do
     GenServer.call(:todo_cache, {:server_process, todo_list_name})
   end
 
+  @impl GenServer
   def init(_) do
     {:ok, %{}}
   end
 
+  @impl GenServer
   def handle_call({:server_process, todo_list_name}, _, todo_servers) do
     case Map.fetch(todo_servers, todo_list_name) do
       {:ok, todo_server} ->
