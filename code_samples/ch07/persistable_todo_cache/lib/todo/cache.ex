@@ -11,7 +11,7 @@ defmodule Todo.Cache do
 
   @impl GenServer
   def init(_) do
-    Todo.Database.start("./persist/")
+    Todo.Database.start()
     {:ok, %{}}
   end
 

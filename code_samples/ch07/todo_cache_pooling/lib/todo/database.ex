@@ -1,8 +1,10 @@
 defmodule Todo.Database do
   use GenServer
 
-  def start(db_folder) do
-    GenServer.start(__MODULE__, db_folder, name: :database_server)
+  @db_folder "./persist"
+
+  def start do
+    GenServer.start(__MODULE__, nil, name: __MODULE__)
   end
 
   def store(key, data) do
@@ -17,16 +19,17 @@ defmodule Todo.Database do
     |> Todo.DatabaseWorker.get(key)
   end
 
-  # Choosing a worker makes a request to the :database_server process. There we
+  # Choosing a worker makes a request to the database server process. There we
   # keep the knowledge about our workers, and return the pid of the corresponding
   # worker. Once this is done, the caller process will talk to the worker directly.
   defp choose_worker(key) do
-    GenServer.call(:database_server, {:choose_worker, key})
+    GenServer.call(__MODULE__, {:choose_worker, key})
   end
 
   @impl GenServer
-  def init(db_folder) do
-    {:ok, start_workers(db_folder)}
+  def init(_) do
+    File.mkdir_p!(@db_folder)
+    {:ok, start_workers()}
   end
 
   @impl GenServer
@@ -35,17 +38,9 @@ defmodule Todo.Database do
     {:reply, Map.get(workers, worker_key), workers}
   end
 
-  # Needed for testing purposes
-  @impl GenServer
-  def terminate(_reason, workers) do
-    workers
-    |> Map.values()
-    |> Enum.each(&GenServer.stop/1)
-  end
-
-  defp start_workers(db_folder) do
+  defp start_workers() do
     for index <- 1..3, into: %{} do
-      {:ok, pid} = Todo.DatabaseWorker.start(db_folder)
+      {:ok, pid} = Todo.DatabaseWorker.start(@db_folder)
       {index - 1, pid}
     end
   end

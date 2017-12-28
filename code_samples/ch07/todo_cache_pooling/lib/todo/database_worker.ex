@@ -15,7 +15,6 @@ defmodule Todo.DatabaseWorker do
 
   @impl GenServer
   def init(db_folder) do
-    File.mkdir_p(db_folder)
     {:ok, db_folder}
   end
 

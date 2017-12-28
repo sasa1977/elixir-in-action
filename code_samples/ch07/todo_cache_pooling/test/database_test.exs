@@ -1,13 +1,9 @@
-defmodule DatabaseServerTest do
+defmodule DatabaseTest do
   use ExUnit.Case, async: false
 
   setup do
-    Todo.Database.start("./test_persist")
-
-    on_exit(fn ->
-      File.rm_rf("./test_persist/")
-      GenServer.stop(:database_server)
-    end)
+    Todo.Database.start()
+    on_exit(fn -> GenServer.stop(Todo.Database) end)
   end
 
   test "get and store" do
