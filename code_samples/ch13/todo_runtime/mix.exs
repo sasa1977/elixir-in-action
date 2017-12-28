@@ -14,19 +14,17 @@ defmodule Todo.MixProject do
   def application do
     [
       extra_applications: [:logger, :runtime_tools],
-      applications: [:gproc, :cowboy, :plug],
       mod: {Todo.Application, []}
     ]
   end
 
   defp deps do
     [
-      {:gproc, "0.3.1"},
-      {:cowboy, "1.0.4"},
-      {:plug, "1.3.0"},
-      {:distillery, "1.5.2"},
-      {:meck, "0.8.9", only: :test},
-      {:httpoison, "0.8.0", only: :test}
+      {:poolboy, "~> 1.5"},
+      {:cowboy, "~> 1.1"},
+      {:plug, "~> 1.4"},
+      {:distillery, "~> 1.4"},
+      {:httpoison, "0.13.0", only: :test}
     ]
   end
 end

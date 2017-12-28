@@ -18,6 +18,6 @@ defmodule Todo.MixProject do
   end
 
   defp deps do
-    [{:meck, "~> 0.8.9", only: :test}]
+    []
   end
 end

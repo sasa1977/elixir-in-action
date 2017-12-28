@@ -1,0 +1,13 @@
+defmodule Todo.System do
+  def start_link do
+    Supervisor.start_link(
+      [
+        Todo.ProcessRegistry,
+        Todo.Database,
+        Todo.ServerSupervisor,
+        Todo.Web
+      ],
+      strategy: :one_for_one
+    )
+  end
+end

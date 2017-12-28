@@ -4,8 +4,12 @@ defmodule Todo.Web do
   plug(:match)
   plug(:dispatch)
 
-  def start_server do
-    Plug.Adapters.Cowboy.http(__MODULE__, nil, port: 5454)
+  def child_spec(_arg) do
+    Plug.Adapters.Cowboy.child_spec(
+      scheme: :http,
+      plug: __MODULE__,
+      options: [port: 5454]
+    )
   end
 
   # curl 'http://localhost:5454/entries?list=bob&date=20181219'

@@ -1,15 +1,17 @@
 defmodule Todo.ServerSupervisor do
-  use Supervisor
-
-  def start_link do
-    Supervisor.start_link(__MODULE__, nil, name: :todo_server_supervisor)
+  def start_link() do
+    DynamicSupervisor.start_link(name: __MODULE__, strategy: :one_for_one)
   end
 
   def start_child(todo_list_name) do
-    Supervisor.start_child(:todo_server_supervisor, [todo_list_name])
+    DynamicSupervisor.start_child(__MODULE__, {Todo.Server, todo_list_name})
   end
 
-  def init(_) do
-    supervise([worker(Todo.Server, [])], strategy: :simple_one_for_one)
+  def child_spec(_arg) do
+    %{
+      id: __MODULE__,
+      start: {__MODULE__, :start_link, []},
+      type: :supervisor
+    }
   end
 end

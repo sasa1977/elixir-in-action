@@ -1,18 +1,6 @@
 defmodule HttpServerTest do
   use ExUnit.Case, async: false
 
-  setup do
-    File.rm_rf("./persist/")
-    {:ok, apps} = Application.ensure_all_started(:todo)
-    HTTPoison.start()
-
-    on_exit(fn ->
-      Enum.each(apps, &Application.stop/1)
-    end)
-
-    :ok
-  end
-
   test "http server" do
     assert %HTTPoison.Response{body: "", status_code: 200} =
              HTTPoison.get!("http://127.0.0.1:5454/entries?list=test&date=20181219")

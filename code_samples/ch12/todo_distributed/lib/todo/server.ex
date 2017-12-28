@@ -7,7 +7,7 @@ defmodule Todo.Server do
     GenServer.start_link(
       Todo.Server,
       name,
-      name: {:global, {:todo_server, name}}
+      name: {:global, {__MODULE__, name}}
     )
   end
 
@@ -21,7 +21,7 @@ defmodule Todo.Server do
   end
 
   def whereis(name) do
-    :global.whereis_name({:todo_server, name})
+    :global.whereis_name({__MODULE__, name})
   end
 
   @impl GenServer
