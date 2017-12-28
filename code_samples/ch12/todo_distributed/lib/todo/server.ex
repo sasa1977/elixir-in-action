@@ -3,16 +3,10 @@ defmodule Todo.Server do
 
   def start_link(name) do
     IO.puts("Starting to-do server for #{name}")
-
-    GenServer.start_link(
-      Todo.Server,
-      name,
-      name: {:global, {__MODULE__, name}}
-    )
+    GenServer.start_link(Todo.Server, name, name: registered_name(name))
   end
 
   def add_entry(todo_server, new_entry) do
-    # add_entry is turned into a call
     GenServer.call(todo_server, {:add_entry, new_entry})
   end
 
@@ -21,7 +15,14 @@ defmodule Todo.Server do
   end
 
   def whereis(name) do
-    :global.whereis_name({__MODULE__, name})
+    case :global.whereis_name({__MODULE__, name}) do
+      :undefined -> nil
+      pid -> pid
+    end
+  end
+
+  defp registered_name(name) do
+    {:global, {__MODULE__, name}}
   end
 
   @impl GenServer
@@ -36,7 +37,6 @@ defmodule Todo.Server do
     {:reply, :ok, {name, todo_list}}
   end
 
-  @impl GenServer
   def handle_call({:entries, date}, _, {name, todo_list}) do
     {
       :reply,
