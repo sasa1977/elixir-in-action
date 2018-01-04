@@ -1,9 +1,9 @@
-defmodule ProfileCache.MixProject do
+defmodule KeyValue.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :profile_cache,
+      app: :key_value,
       version: "0.1.0",
       elixir: "~> 1.6-rc",
       start_permanent: Mix.env() == :prod,
