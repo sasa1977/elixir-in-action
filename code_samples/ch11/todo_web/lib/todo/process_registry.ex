@@ -3,18 +3,11 @@ defmodule Todo.ProcessRegistry do
     Registry.start_link(keys: :unique, name: __MODULE__)
   end
 
-  def via(key) do
+  def via_tuple(key) do
     {:via, Registry, {__MODULE__, key}}
   end
 
-  def whereis(key) do
-    case Registry.lookup(__MODULE__, key) do
-      [{pid, _value}] -> pid
-      [] -> nil
-    end
-  end
-
-  def child_spec(_arg) do
+  def child_spec(_) do
     Supervisor.child_spec(
       Registry,
       id: __MODULE__,

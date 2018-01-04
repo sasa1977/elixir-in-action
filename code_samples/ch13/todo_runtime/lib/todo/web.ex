@@ -52,12 +52,15 @@ defmodule Todo.Web do
   end
 
   defp add_entry(conn) do
-    conn.params["list"]
-    |> Todo.Cache.server_process()
-    |> Todo.Server.add_entry(%{
+    list_name = conn.params["list"]
+    new_entry = %{
       date: parse_date(conn.params["date"]),
       title: conn.params["title"]
-    })
+    }
+
+    list_name
+    |> Todo.Cache.server_process()
+    |> Todo.Server.add_entry(new_entry)
 
     Plug.Conn.assign(conn, :response, "OK")
   end

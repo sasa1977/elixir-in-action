@@ -1,3 +1,5 @@
-File.rm_rf!(Application.fetch_env!(:todo, :db_folder))
-File.mkdir_p!(Application.fetch_env!(:todo, :db_folder))
+db_settings = Application.fetch_env!(:todo, :database)
+db_folder = Keyword.fetch!(db_settings, :folder)
+File.rm_rf!(db_folder)
+File.mkdir_p!(db_folder)
 ExUnit.start()

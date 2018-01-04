@@ -1,5 +1,6 @@
 defmodule Todo.Cache do
   def start_link() do
+    IO.puts("Starting to-do cache")
     DynamicSupervisor.start_link(name: __MODULE__, strategy: :one_for_one)
   end
 
@@ -12,13 +13,6 @@ defmodule Todo.Cache do
   end
 
   def server_process(todo_list_name) do
-    case Todo.Server.whereis(todo_list_name) do
-      nil -> ensure_server_started(todo_list_name)
-      pid -> pid
-    end
-  end
-
-  defp ensure_server_started(todo_list_name) do
     case start_child(todo_list_name) do
       {:ok, pid} -> pid
       {:error, {:already_started, pid}} -> pid

@@ -1,14 +1,17 @@
 defmodule Todo.Database do
   def start_link do
-    File.mkdir_p!(db_folder())
+    db_settings = Application.fetch_env!(:todo, :database)
+    db_folder = Keyword.fetch!(db_settings, :folder)
+
+    File.mkdir_p!(db_folder)
 
     :poolboy.start_link(
       [
         name: {:local, __MODULE__},
         worker_module: Todo.DatabaseWorker,
-        size: 3
+        size: Keyword.fetch!(db_settings, :pool_size)
       ],
-      [db_folder()]
+      [db_folder]
     )
   end
 
@@ -26,9 +29,5 @@ defmodule Todo.Database do
 
   def get(key) do
     :poolboy.transaction(__MODULE__, &Todo.DatabaseWorker.get(&1, key))
-  end
-
-  defp db_folder() do
-    Application.fetch_env!(:todo, :db_folder)
   end
 end

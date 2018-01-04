@@ -1,3 +1,3 @@
 use Mix.Config
 
-config :todo, db_folder: "./test_persist"
+config :todo, :database, folder: "./test_persist"

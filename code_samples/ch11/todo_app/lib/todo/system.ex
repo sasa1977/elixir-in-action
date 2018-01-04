@@ -6,7 +6,6 @@ defmodule Todo.System do
         Todo.Database,
         Todo.Cache
       ],
-      name: __MODULE__,
       strategy: :one_for_one
     )
   end
