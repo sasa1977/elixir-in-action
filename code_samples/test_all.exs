@@ -36,7 +36,7 @@ defmodule EIA.TestRunner do
   end
 
   defp test_scripts do
-    Path.wildcard("./ch??/test/*.exs")
+    Path.wildcard("./ch??/**/test/tests.exs")
     |> Stream.flat_map(&file_commands/1)
     |> run_while_ok
   end

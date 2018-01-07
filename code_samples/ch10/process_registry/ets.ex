@@ -30,6 +30,7 @@ defmodule SimpleRegistry do
 
   @impl GenServer
   def init(_) do
+    Process.flag(:trap_exit, true)
     :ets.new(__MODULE__, [:named_table, :public, read_concurrency: true, write_concurrency: true])
     {:ok, nil}
   end
