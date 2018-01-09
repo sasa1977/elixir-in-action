@@ -1,26 +1,21 @@
 defmodule TodoCacheTest do
-  use ExUnit.Case, async: false
+  use ExUnit.Case
 
-  test "mapping of list names to pids" do
-    {:ok, supervisor} = Todo.System.start_link()
-
+  test "server_process" do
+    Todo.System.start_link()
     bob_pid = Todo.Cache.server_process("bob")
 
     assert bob_pid != Todo.Cache.server_process("alice")
     assert bob_pid == Todo.Cache.server_process("bob")
-
-    Supervisor.stop(supervisor)
   end
 
-  test "to-do requests" do
-    {:ok, supervisor} = Todo.System.start_link()
-
+  test "to-do operations" do
+    Todo.System.start_link()
     alice = Todo.Cache.server_process("alice")
     Todo.Server.add_entry(alice, %{date: ~D[2018-12-19], title: "Dentist"})
     entries = Todo.Server.entries(alice, ~D[2018-12-19])
-    assert [%{date: ~D[2018-12-19], title: "Dentist"}] = entries
 
-    Supervisor.stop(supervisor)
+    assert [%{date: ~D[2018-12-19], title: "Dentist"}] = entries
   end
 
   test "persistence" do
@@ -31,7 +26,7 @@ defmodule TodoCacheTest do
     assert 1 == length(Todo.Server.entries(john, ~D[2018-12-20]))
 
     Supervisor.stop(supervisor)
-    {:ok, supervisor} = Todo.System.start_link()
+    Todo.System.start_link()
 
     entries =
       "john"
