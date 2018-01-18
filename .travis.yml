@@ -1,8 +1,8 @@
 language: elixir
 elixir:
-  - 1.4
+  - 1.6
 otp_release:
-  - 19.2
+  - 20.1
 install:
   - mix local.hex --force
   - mix local.rebar --force
