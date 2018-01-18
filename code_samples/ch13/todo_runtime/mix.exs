@@ -23,8 +23,7 @@ defmodule Todo.MixProject do
       {:poolboy, "~> 1.5"},
       {:cowboy, "~> 1.1"},
       {:plug, "~> 1.4"},
-      {:distillery, "~> 1.4"},
-      {:httpoison, "0.13.0", only: :test}
+      {:distillery, "~> 1.4"}
     ]
   end
 end

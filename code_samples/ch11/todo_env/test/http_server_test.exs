@@ -1,17 +1,25 @@
 defmodule HttpServerTest do
   use ExUnit.Case, async: false
+  use Plug.Test
 
-  test "http server" do
-    assert %HTTPoison.Response{body: "", status_code: 200} =
-             HTTPoison.get!("http://127.0.0.1:5454/entries?list=test&date=20181219")
+  test "no entries" do
+    assert get("/entries?list=test_1&date=20181219").status == 200
+    assert get("/entries?list=test_1&date=20181219").resp_body == ""
+  end
 
-    assert %HTTPoison.Response{body: "OK", status_code: 200} =
-             HTTPoison.post!(
-               "http://127.0.0.1:5454/add_entry?list=test&date=20181219&title=Dentist",
-               ""
-             )
+  test "adding an entry" do
+    resp = post("/add_entry?list=test_2&date=20181219&title=Dentist")
 
-    assert %HTTPoison.Response{body: "2018-12-19    Dentist", status_code: 200} =
-             HTTPoison.get!("http://127.0.0.1:5454/entries?list=test&date=20181219")
+    assert resp.status == 200
+    assert resp.resp_body == "OK"
+    assert get("/entries?list=test_2&date=20181219").resp_body == "2018-12-19 Dentist"
+  end
+
+  defp get(path) do
+    Todo.Web.call(conn(:get, path), Todo.Web.init([]))
+  end
+
+  defp post(path) do
+    Todo.Web.call(conn(:post, path), Todo.Web.init([]))
   end
 end

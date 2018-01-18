@@ -1,10 +1,11 @@
 defmodule Todo.Database do
   @db_folder "./persist"
 
-  def start_link do
+  def child_spec(_) do
     File.mkdir_p!(@db_folder)
 
-    :poolboy.start_link(
+    :poolboy.child_spec(
+      __MODULE__,
       [
         name: {:local, __MODULE__},
         worker_module: Todo.DatabaseWorker,
@@ -14,19 +15,17 @@ defmodule Todo.Database do
     )
   end
 
-  def child_spec(_) do
-    %{
-      id: __MODULE__,
-      start: {__MODULE__, :start_link, []},
-      type: :supervisor
-    }
-  end
-
   def store(key, data) do
-    :poolboy.transaction(__MODULE__, &Todo.DatabaseWorker.store(&1, key, data))
+    :poolboy.transaction(
+      __MODULE__,
+      fn worker_pid -> Todo.DatabaseWorker.store(worker_pid, key, data) end
+    )
   end
 
   def get(key) do
-    :poolboy.transaction(__MODULE__, &Todo.DatabaseWorker.get(&1, key))
+    :poolboy.transaction(
+      __MODULE__,
+      fn worker_pid -> Todo.DatabaseWorker.get(worker_pid, key) end
+    )
   end
 end

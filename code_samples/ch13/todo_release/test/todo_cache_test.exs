@@ -16,7 +16,7 @@ defmodule TodoCacheTest do
     assert [%{date: ~D[2018-12-19], title: "Dentist"}] = entries
   end
 
-  test "persistence", context do
+  test "persistence" do
     john = Todo.Cache.server_process("john")
     Todo.Server.add_entry(john, %{date: ~D[2018-12-20], title: "Shopping"})
     assert 1 == length(Todo.Server.entries(john, ~D[2018-12-20]))
