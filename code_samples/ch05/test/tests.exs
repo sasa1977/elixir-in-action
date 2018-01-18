@@ -25,7 +25,7 @@ defmodule Test do
   test_script "stateful_database_server" do
     pid = DatabaseServer.start()
     DatabaseServer.run_async(pid, "foo")
-    assert DatabaseServer.get_result() =~ ~r/Connection \d{3}: foo result/
+    assert DatabaseServer.get_result() =~ ~r/Connection \d+: foo result/
   end
 
   test_script "todo_server" do

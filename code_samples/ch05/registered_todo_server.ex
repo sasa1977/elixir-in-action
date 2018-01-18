@@ -1,7 +1,7 @@
 defmodule TodoServer do
   def start do
     spawn(fn ->
-      Process.register(self, :todo_server)
+      Process.register(self(), :todo_server)
       loop(TodoList.new())
     end)
   end
@@ -11,7 +11,7 @@ defmodule TodoServer do
   end
 
   def entries(date) do
-    send(:todo_server, {:entries, self, date})
+    send(:todo_server, {:entries, self(), date})
 
     receive do
       {:todo_entries, entries} -> entries

@@ -8,7 +8,7 @@ defmodule TodoServer do
   end
 
   def entries(todo_server, date) do
-    send(todo_server, {:entries, self, date})
+    send(todo_server, {:entries, self(), date})
 
     receive do
       {:todo_entries, entries} -> entries

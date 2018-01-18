@@ -4,7 +4,7 @@ defmodule Server do
   end
 
   def send_msg(server, message) do
-    send(server, {self, message})
+    send(server, {self(), message})
 
     receive do
       {:response, response} -> response

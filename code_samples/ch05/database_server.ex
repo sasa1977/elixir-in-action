@@ -4,7 +4,7 @@ defmodule DatabaseServer do
   end
 
   def run_async(server_pid, query_def) do
-    send(server_pid, {:run_query, self, query_def})
+    send(server_pid, {:run_query, self(), query_def})
   end
 
   def get_result do

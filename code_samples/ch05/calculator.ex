@@ -4,7 +4,7 @@ defmodule Calculator do
   end
 
   def value(server_pid) do
-    send(server_pid, {:value, self})
+    send(server_pid, {:value, self()})
 
     receive do
       {:response, value} ->
