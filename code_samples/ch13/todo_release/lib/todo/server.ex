@@ -5,6 +5,13 @@ defmodule Todo.Server do
     GenServer.start_link(Todo.Server, name, name: global_name(name))
   end
 
+  def whereis(name) do
+    case :global.whereis_name({__MODULE__, name}) do
+      :undefined -> nil
+      pid -> pid
+    end
+  end
+
   def add_entry(todo_server, new_entry) do
     GenServer.call(todo_server, {:add_entry, new_entry})
   end

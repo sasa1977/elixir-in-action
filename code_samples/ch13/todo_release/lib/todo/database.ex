@@ -34,7 +34,9 @@ defmodule Todo.Database do
   end
 
   def store_local(key, data) do
-    :poolboy.transaction(__MODULE__, &Todo.DatabaseWorker.store(&1, key, data))
+    :poolboy.transaction(__MODULE__, fn worker_pid ->
+      Todo.DatabaseWorker.store(worker_pid, key, data)
+    end)
   end
 
   def get(key) do
