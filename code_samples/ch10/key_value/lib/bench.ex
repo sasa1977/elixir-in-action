@@ -12,8 +12,10 @@ defmodule Bench do
 
     {time, _} =
       :timer.tc(fn ->
-        1..concurrency
-        |> Enum.map(&start_load_process(module, &1, items_per_process, num_updates))
+        0..(concurrency - 1)
+        |> Enum.map(
+          &start_load_process(module, &1 * items_per_process, items_per_process, num_updates)
+        )
         |> Enum.map(&Task.await(&1, :infinity))
       end)
 
