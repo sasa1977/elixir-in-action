@@ -32,9 +32,9 @@ defmodule Todo.Server do
 
   @impl GenServer
   def handle_call({:add_entry, new_entry}, _, {name, todo_list}) do
-    todo_list = Todo.List.add_entry(todo_list, new_entry)
-    Todo.Database.store(name, todo_list)
-    {:reply, :ok, {name, todo_list}}
+    new_list = Todo.List.add_entry(todo_list, new_entry)
+    Todo.Database.store(name, new_list)
+    {:reply, :ok, {name, new_list}}
   end
 
   def handle_call({:entries, date}, _, {name, todo_list}) do

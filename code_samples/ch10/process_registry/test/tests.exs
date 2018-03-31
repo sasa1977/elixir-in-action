@@ -14,7 +14,7 @@ defmodule Test do
     {:ok, pid} = Agent.start_link(fn -> SimpleRegistry.register("bar") end)
     assert SimpleRegistry.whereis("bar") == pid
     Agent.stop(pid)
-    :timer.sleep(100)
+    Process.sleep(100)
     assert SimpleRegistry.whereis("bar") == nil
   end
 
@@ -28,7 +28,7 @@ defmodule Test do
     {:ok, pid} = Agent.start_link(fn -> SimpleRegistry.register("bar") end)
     assert SimpleRegistry.whereis("bar") == pid
     Agent.stop(pid)
-    :timer.sleep(100)
+    Process.sleep(100)
     assert SimpleRegistry.whereis("bar") == nil
   end
 end

@@ -40,7 +40,7 @@ defmodule Test do
 
   test_script "registered_todo_server" do
     TodoServer.start()
-    :timer.sleep(200)
+    Process.sleep(200)
     TodoServer.add_entry(%{date: ~D[2018-01-01], title: "Dinner"})
     TodoServer.add_entry(%{date: ~D[2018-01-02], title: "Dentist"})
     TodoServer.add_entry(%{date: ~D[2018-01-02], title: "Meeting"})

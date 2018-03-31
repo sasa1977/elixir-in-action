@@ -25,7 +25,7 @@ defmodule DatabaseServer do
   end
 
   defp run_query(query_def) do
-    :timer.sleep(2000)
+    Process.sleep(2000)
     "#{query_def} result"
   end
 end

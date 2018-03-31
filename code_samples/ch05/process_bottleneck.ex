@@ -14,7 +14,7 @@ defmodule Server do
   defp loop do
     receive do
       {caller, msg} ->
-        :timer.sleep(1000)
+        Process.sleep(1000)
         send(caller, {:response, msg})
     end
 

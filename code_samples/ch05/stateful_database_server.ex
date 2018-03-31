@@ -28,7 +28,7 @@ defmodule DatabaseServer do
   end
 
   defp run_query(connection, query_def) do
-    :timer.sleep(2000)
+    Process.sleep(2000)
     "Connection #{connection}: #{query_def} result"
   end
 end
