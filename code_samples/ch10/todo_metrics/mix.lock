@@ -1,0 +1,3 @@
+%{
+  "meck": {:hex, :meck, "0.8.9", "64c5c0bd8bcca3a180b44196265c8ed7594e16bcc845d0698ec6b4e577f48188", [], [], "hexpm"},
+}
