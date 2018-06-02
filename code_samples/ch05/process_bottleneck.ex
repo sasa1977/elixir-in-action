@@ -1,6 +1,6 @@
 defmodule Server do
   def start do
-    spawn(fn -> loop end)
+    spawn(fn -> loop() end)
   end
 
   def send_msg(server, message) do
