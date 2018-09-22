@@ -52,10 +52,5 @@ defmodule Todo.Server do
     {:stop, :normal, {name, todo_list}}
   end
 
-  def handle_info(unknown_message, state) do
-    super(unknown_message, state)
-    {:noreply, state, expiry_idle_timeout()}
-  end
-
   defp expiry_idle_timeout(), do: Application.fetch_env!(:todo, :todo_item_expiry)
 end

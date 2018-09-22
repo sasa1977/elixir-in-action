@@ -41,10 +41,6 @@ defmodule SimpleRegistry do
     {:noreply, deregister_pid(process_registry, pid)}
   end
 
-  def handle_info(other, process_registry) do
-    super(other, process_registry)
-  end
-
   defp deregister_pid(process_registry, pid) do
     # We'll walk through each {key, value} item, and keep those elements whose
     # value is different to the provided pid.

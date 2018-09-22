@@ -47,9 +47,4 @@ defmodule Todo.Server do
     IO.puts("Stopping to-do server for #{name}")
     {:stop, :normal, {name, todo_list}}
   end
-
-  def handle_info(unknown_message, state) do
-    super(unknown_message, state)
-    {:noreply, state, @expiry_idle_timeout}
-  end
 end

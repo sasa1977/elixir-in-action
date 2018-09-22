@@ -40,8 +40,4 @@ defmodule SimpleRegistry do
     :ets.match_delete(__MODULE__, {:_, pid})
     {:noreply, state}
   end
-
-  def handle_info(other, process_registry) do
-    super(other, process_registry)
-  end
 end
