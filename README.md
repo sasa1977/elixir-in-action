@@ -1,3 +1,5 @@
-This repository contains accompanying code for the [Elixir in Action](http://www.manning.com/juric/) book. To compile and run the code, you'll need Elixir 1.0.x and Erlang 17.0. A `git` client should also be installed and available somewhere in the execution path.
+[![Build Status](https://travis-ci.org/sasa1977/elixir-in-action.svg?branch=2nd-edition)](https://travis-ci.org/sasa1977/elixir-in-action)
 
-The code in the master branch corresponds to the code in the printed edition, which is written for Elixir 1.0 and Erlang 17.x. If you're running the most recent version of Elixir and Erlang, you can find the updated code in the branch [post-release-updates](https://github.com/sasa1977/elixir-in-action/tree/post-release-updates). There are also [various tags](https://github.com/sasa1977/elixir-in-action/releases) which identify the code that works on older versions of Elixir/Erlang which have been released after the book has been published.
+This branch contains accompanying code for [Elixir in Action, Second Edition](https://www.manning.com/books/elixir-in-action-second-edition). To compile and run the code, you'll need Elixir 1.7 and Erlang 21.x. A `git` client should also be installed and available somewhere in the execution path.
+
+The code for the first edition can be found [here](https://github.com/sasa1977/elixir-in-action/tree/edition-1).

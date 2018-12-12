@@ -1,26 +1,25 @@
 defmodule HttpServerTest do
   use ExUnit.Case, async: false
+  use Plug.Test
 
-  setup do
-    File.rm_rf("./persist/")
-    {:ok, apps} = Application.ensure_all_started(:todo)
-    HTTPoison.start
-
-    on_exit fn ->
-      Enum.each(apps, &Application.stop/1)
-    end
-
-    :ok
+  test "no entries" do
+    assert get("/entries?list=test_1&date=2018-12-19").status == 200
+    assert get("/entries?list=test_1&date=2018-12-19").resp_body == ""
   end
 
-  test "http server" do
-    assert %HTTPoison.Response{body: "", status_code: 200} =
-      HTTPoison.get("http://127.0.0.1:5454/entries?list=test&date=20131219")
+  test "adding an entry" do
+    resp = post("/add_entry?list=test_2&date=2018-12-19&title=Dentist")
 
-    assert %HTTPoison.Response{body: "OK", status_code: 200} =
-      HTTPoison.post("http://127.0.0.1:5454/add_entry?list=test&date=20131219&title=Dentist", "")
+    assert resp.status == 200
+    assert resp.resp_body == "OK"
+    assert get("/entries?list=test_2&date=2018-12-19").resp_body == "2018-12-19 Dentist"
+  end
 
-    assert %HTTPoison.Response{body: "2013-12-19    Dentist", status_code: 200} =
-      HTTPoison.get("http://127.0.0.1:5454/entries?list=test&date=20131219")
+  defp get(path) do
+    Todo.Web.call(conn(:get, path), Todo.Web.init([]))
+  end
+
+  defp post(path) do
+    Todo.Web.call(conn(:post, path), Todo.Web.init([]))
   end
 end

@@ -1,9 +1,0 @@
-%{"cowboy": {:hex, :cowboy, "1.0.0"},
-  "cowlib": {:hex, :cowlib, "1.0.1"},
-  "gproc": {:hex, :gproc, "0.3.1"},
-  "hackney": {:hex, :hackney, "0.14.1"},
-  "httpoison": {:hex, :httpoison, "0.4.3"},
-  "idna": {:hex, :idna, "1.0.1"},
-  "meck": {:hex, :meck, "0.8.2"},
-  "plug": {:hex, :plug, "0.10.0"},
-  "ranch": {:hex, :ranch, "1.0.0"}}

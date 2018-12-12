@@ -1,12 +1,20 @@
 defmodule TodoCacheTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   test "server_process" do
-    {:ok, cache} = Todo.Cache.start
-    bobs_list = Todo.Cache.server_process(cache, "bobs_list")
-    alices_list = Todo.Cache.server_process(cache, "alices_list")
+    {:ok, cache} = Todo.Cache.start()
+    bob_pid = Todo.Cache.server_process(cache, "bob")
 
-    assert(bobs_list != alices_list)
-    assert(bobs_list == Todo.Cache.server_process(cache, "bobs_list"))
+    assert bob_pid != Todo.Cache.server_process(cache, "alice")
+    assert bob_pid == Todo.Cache.server_process(cache, "bob")
+  end
+
+  test "to-do operations" do
+    {:ok, cache} = Todo.Cache.start()
+    alice = Todo.Cache.server_process(cache, "alice")
+    Todo.Server.add_entry(alice, %{date: ~D[2018-12-19], title: "Dentist"})
+    entries = Todo.Server.entries(alice, ~D[2018-12-19])
+
+    assert [%{date: ~D[2018-12-19], title: "Dentist"}] = entries
   end
 end

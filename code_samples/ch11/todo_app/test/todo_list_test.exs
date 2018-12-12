@@ -2,53 +2,63 @@ defmodule TodoListTest do
   use ExUnit.Case, async: true
 
   test "empty list" do
-    assert(0 == Todo.List.size(Todo.List.new))
+    assert Todo.List.size(Todo.List.new()) == 0
+  end
+
+  test "entries" do
+    todo_list =
+      Todo.List.new([
+        %{date: ~D[2018-12-19], title: "Dentist"},
+        %{date: ~D[2018-12-20], title: "Shopping"},
+        %{date: ~D[2018-12-19], title: "Movies"}
+      ])
+
+    assert Todo.List.size(todo_list) == 3
+    assert todo_list |> Todo.List.entries(~D[2018-12-19]) |> length() == 2
+    assert todo_list |> Todo.List.entries(~D[2018-12-20]) |> length() == 1
+    assert todo_list |> Todo.List.entries(~D[2018-12-21]) |> length() == 0
+
+    titles = todo_list |> Todo.List.entries(~D[2018-12-19]) |> Enum.map(& &1.title)
+    assert ["Dentist", "Movies"] = titles
   end
 
   test "add_entry" do
-    assert(3 == Todo.List.size(sample_todo_list))
-    assert(2 == sample_todo_list |> Todo.List.entries({2013, 12, 19}) |> length)
-    assert(1 == sample_todo_list |> Todo.List.entries({2013, 12, 20}) |> length)
-    assert(0 == sample_todo_list |> Todo.List.entries({2013, 12, 22}) |> length)
+    todo_list =
+      Todo.List.new()
+      |> Todo.List.add_entry(%{date: ~D[2018-12-19], title: "Dentist"})
+      |> Todo.List.add_entry(%{date: ~D[2018-12-20], title: "Shopping"})
+      |> Todo.List.add_entry(%{date: ~D[2018-12-19], title: "Movies"})
 
-    assert(2 == shopping_entry.id)
-    assert({2013, 12, 20} == shopping_entry.date)
-    assert("Shopping" == shopping_entry.title)
+    assert Todo.List.size(todo_list) == 3
+    assert todo_list |> Todo.List.entries(~D[2018-12-19]) |> length() == 2
+    assert todo_list |> Todo.List.entries(~D[2018-12-20]) |> length() == 1
+    assert todo_list |> Todo.List.entries(~D[2018-12-21]) |> length() == 0
+
+    titles = todo_list |> Todo.List.entries(~D[2018-12-19]) |> Enum.map(& &1.title)
+    assert ["Dentist", "Movies"] = titles
   end
 
   test "update_entry" do
-    updated_list =
-      sample_todo_list
-      |> Todo.List.update_entry(shopping_entry.id, &Map.put(&1, :title, "Updated shopping"))
+    todo_list =
+      Todo.List.new()
+      |> Todo.List.add_entry(%{date: ~D[2018-12-19], title: "Dentist"})
+      |> Todo.List.add_entry(%{date: ~D[2018-12-20], title: "Shopping"})
+      |> Todo.List.add_entry(%{date: ~D[2018-12-19], title: "Movies"})
+      |> Todo.List.update_entry(2, &Map.put(&1, :title, "Updated shopping"))
 
-    assert(3 == Todo.List.size(updated_list))
-    assert("Updated shopping" == shopping_entry(updated_list).title)
-
-
-    not_modified_list =
-      sample_todo_list
-      |> Todo.List.update_entry(-1, fn(_) -> flunk("shouldn't happen") end)
-
-    assert(sample_todo_list == not_modified_list)
+    assert Todo.List.size(todo_list) == 3
+    assert [%{title: "Updated shopping"}] = Todo.List.entries(todo_list, ~D[2018-12-20])
   end
 
   test "delete_entry" do
-    deleted_list = Todo.List.delete_entry(sample_todo_list, shopping_entry.id)
+    todo_list =
+      Todo.List.new()
+      |> Todo.List.add_entry(%{date: ~D[2018-12-19], title: "Dentist"})
+      |> Todo.List.add_entry(%{date: ~D[2018-12-20], title: "Shopping"})
+      |> Todo.List.add_entry(%{date: ~D[2018-12-19], title: "Movies"})
+      |> Todo.List.delete_entry(2)
 
-    assert(2 == Todo.List.size(deleted_list))
-    assert(0 == deleted_list |> Todo.List.entries({2013, 12, 20}) |> length)
-  end
-
-  defp sample_todo_list do
-    Todo.List.new
-    |> Todo.List.add_entry(%{date: {2013, 12, 19}, title: "Dentist"})
-    |> Todo.List.add_entry(%{date: {2013, 12, 20}, title: "Shopping"})
-    |> Todo.List.add_entry(%{date: {2013, 12, 19}, title: "Movies"})
-  end
-
-  defp shopping_entry(todo_list \\ sample_todo_list) do
-    todo_list
-    |> Todo.List.entries({2013, 12, 20})
-    |> Enum.at(0)
+    assert Todo.List.size(todo_list) == 2
+    assert Todo.List.entries(todo_list, ~D[2018-12-20]) == []
   end
 end

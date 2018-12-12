@@ -1,20 +1,20 @@
 defmodule DatabaseServer do
   def start do
     spawn(fn ->
-      connection = :random.uniform(1000)
+      connection = :rand.uniform(1000)
       loop(connection)
     end)
   end
 
   def run_async(server_pid, query_def) do
-    send(server_pid, {:run_query, self, query_def})
+    send(server_pid, {:run_query, self(), query_def})
   end
 
   def get_result do
     receive do
       {:query_result, result} -> result
-    after 5000 ->
-      {:error, :timeout}
+    after
+      5000 -> {:error, :timeout}
     end
   end
 
@@ -28,7 +28,7 @@ defmodule DatabaseServer do
   end
 
   defp run_query(connection, query_def) do
-    :timer.sleep(2000)
+    Process.sleep(2000)
     "Connection #{connection}: #{query_def} result"
   end
 end

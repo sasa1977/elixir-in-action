@@ -2,11 +2,10 @@ defmodule Loop do
   def list_len(list), do: calc_list_len(list, 0)
 
   defp calc_list_len([], len), do: len
+
   defp calc_list_len([_ | tail], len) do
     calc_list_len(tail, len + 1)
   end
-
-
 
   # This solution collects backwards, starting with the `to` and going
   # back to from. This allows us to make a single pass collection and
@@ -33,8 +32,6 @@ defmodule Loop do
     #   get the result in the proper order.
     make_range(from, to - 1, [to | result])
   end
-
-
 
   def positive(list) do
     filter_positive(list, [])

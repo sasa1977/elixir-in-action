@@ -1,22 +1,38 @@
 defmodule TodoCacheTest do
-  use ExUnit.Case, async: false
-
-  setup do
-    :meck.new(Todo.Database, [:no_link])
-    :meck.expect(Todo.Database, :start, fn(_) -> nil end)
-    :meck.expect(Todo.Database, :get, fn(_) -> nil end)
-    :meck.expect(Todo.Database, :store, fn(_, _) -> :ok end)
-    on_exit(fn -> :meck.unload(Todo.Database) end)
-  end
+  use ExUnit.Case
 
   test "server_process" do
-    Todo.Cache.start_link
-    bobs_list = Todo.Cache.server_process("bobs_list")
-    alices_list = Todo.Cache.server_process("alices_list")
+    Todo.System.start_link()
+    bob_pid = Todo.Cache.server_process("bob")
 
-    assert(bobs_list != alices_list)
-    assert(bobs_list == Todo.Cache.server_process("bobs_list"))
+    assert bob_pid != Todo.Cache.server_process("alice")
+    assert bob_pid == Todo.Cache.server_process("bob")
+  end
 
-    send(:todo_cache, :stop)
+  test "to-do operations" do
+    Todo.System.start_link()
+    alice = Todo.Cache.server_process("alice")
+    Todo.Server.add_entry(alice, %{date: ~D[2018-12-19], title: "Dentist"})
+    entries = Todo.Server.entries(alice, ~D[2018-12-19])
+
+    assert [%{date: ~D[2018-12-19], title: "Dentist"}] = entries
+  end
+
+  test "persistence" do
+    {:ok, supervisor} = Todo.System.start_link()
+
+    john = Todo.Cache.server_process("john")
+    Todo.Server.add_entry(john, %{date: ~D[2018-12-20], title: "Shopping"})
+    assert 1 == length(Todo.Server.entries(john, ~D[2018-12-20]))
+
+    Supervisor.stop(supervisor)
+    Todo.System.start_link()
+
+    entries =
+      "john"
+      |> Todo.Cache.server_process()
+      |> Todo.Server.entries(~D[2018-12-20])
+
+    assert [%{date: ~D[2018-12-20], title: "Shopping"}] = entries
   end
 end

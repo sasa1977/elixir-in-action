@@ -1,28 +1,28 @@
-defmodule Todo.Mixfile do
+defmodule Todo.MixProject do
   use Mix.Project
 
   def project do
-    [ app: :todo,
-      version: "0.0.1",
-      elixir: "~> 1.0.0",
-      deps: deps
+    [
+      app: :todo,
+      version: "0.1.0",
+      elixir: "~> 1.6",
+      start_permanent: Mix.env() == :prod,
+      deps: deps()
     ]
   end
 
   def application do
     [
-      applications: [:logger, :gproc, :cowboy, :plug],
+      extra_applications: [:logger],
       mod: {Todo.Application, []}
     ]
   end
 
   defp deps do
     [
-      {:gproc, "0.3.1"},
-      {:cowboy, "1.0.0"},
-      {:plug, "0.10.0"},
-      {:meck, "0.8.2", only: :test},
-      {:httpoison, "0.4.3", only: :test}
+      {:poolboy, "~> 1.5"},
+      {:cowboy, "~> 1.1"},
+      {:plug, "~> 1.4"}
     ]
   end
 end

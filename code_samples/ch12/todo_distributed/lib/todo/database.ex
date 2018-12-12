@@ -1,33 +1,45 @@
 defmodule Todo.Database do
-  @pool_size 3
+  def child_spec(_) do
+    db_settings = Application.fetch_env!(:todo, :database)
 
-  def start_link(db_folder) do
-    Todo.PoolSupervisor.start_link(db_folder, @pool_size)
+    # Node name is used to determine the database folder. This allows us to
+    # start multiple nodes from the same folders, and data will not clash.
+    [name_prefix, _] = "#{node()}" |> String.split("@")
+    db_folder = "#{Keyword.fetch!(db_settings, :folder)}/#{name_prefix}/"
+
+    File.mkdir_p!(db_folder)
+
+    :poolboy.child_spec(
+      __MODULE__,
+      [
+        name: {:local, __MODULE__},
+        worker_module: Todo.DatabaseWorker,
+        size: Keyword.fetch!(db_settings, :pool_size)
+      ],
+      [db_folder]
+    )
   end
 
   def store(key, data) do
-    {results, bad_nodes} =
+    {_results, bad_nodes} =
       :rpc.multicall(
-        __MODULE__, :store_local, [key, data],
+        __MODULE__,
+        :store_local,
+        [key, data],
         :timer.seconds(5)
       )
+
     Enum.each(bad_nodes, &IO.puts("Store failed on node #{&1}"))
     :ok
   end
 
   def store_local(key, data) do
-    key
-    |> choose_worker
-    |> Todo.DatabaseWorker.store(key, data)
+    :poolboy.transaction(__MODULE__, fn worker_pid ->
+      Todo.DatabaseWorker.store(worker_pid, key, data)
+    end)
   end
 
   def get(key) do
-    key
-    |> choose_worker
-    |> Todo.DatabaseWorker.get(key)
-  end
-
-  defp choose_worker(key) do
-    :erlang.phash2(key, @pool_size) + 1
+    :poolboy.transaction(__MODULE__, fn worker_pid -> Todo.DatabaseWorker.get(worker_pid, key) end)
   end
 end

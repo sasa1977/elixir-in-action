@@ -1,4 +1,4 @@
-#!/usr/bin/env elixir
+#! /usr/bin/env elixir
 
 defmodule EIA.TestRunner do
   def run do
@@ -15,24 +15,28 @@ defmodule EIA.TestRunner do
   defp execute_command(_, error), do: error
 
   defp print_result(:ok), do: IO.puts("\nDone!\n")
-  defp print_result({:error, error}), do: IO.puts("\nError:\n\n#{error}\n")
 
+  defp print_result({:error, error}) do
+    IO.puts(:standard_error, "\nError:\n\n#{error}\n")
+    System.halt(1)
+  end
 
   defp check_elixir_version(project_root \\ ".") do
     case System.cmd("elixir", ["-v"], cd: project_root, stderr_to_stdout: true) do
       {elixir_version, 0} ->
-        if elixir_version =~ ~r/\AElixir 1\.0\.\d+/ do
+        if elixir_version =~ ~r/^Elixir 1\.\d\.\d+/m do
           :ok
         else
           {:error, "Invalid Elixir version #{elixir_version}"}
         end
-      {error, _} -> {:error, error}
+
+      {error, _} ->
+        {:error, error}
     end
   end
 
-
   defp test_scripts do
-    Path.wildcard("./ch??/test/*.exs")
+    Path.wildcard("./ch??/**/test/tests.exs")
     |> Stream.flat_map(&file_commands/1)
     |> run_while_ok
   end
@@ -42,14 +46,13 @@ defmodule EIA.TestRunner do
       &IO.puts("Testing #{&1}"),
       &run_test_script/1
     ]
-    |> Enum.map(&(fn -> apply(&1, [test_file]) end))
+    |> Enum.map(&fn -> apply(&1, [test_file]) end)
   end
 
   defp run_test_script(test_file) do
     System.cmd("elixir", [test_file], stderr_to_stdout: true)
     |> cmd_result
   end
-
 
   defp test_projects do
     Path.wildcard("./ch??/*/mix.exs")
@@ -65,11 +68,12 @@ defmodule EIA.TestRunner do
       &run_mix(&1, "deps.get"),
       &run_mix(&1, "test")
     ]
-    |> Enum.map(&(fn -> apply(&1, [project_root]) end))
+    |> Enum.map(&fn -> apply(&1, [project_root]) end)
   end
 
   defp run_mix(project_root, mix_cmd) do
     IO.puts("  mix #{mix_cmd}...")
+
     System.cmd("mix", [mix_cmd], cd: project_root, stderr_to_stdout: true)
     |> cmd_result
   end
@@ -78,4 +82,4 @@ defmodule EIA.TestRunner do
   defp cmd_result({error, _}), do: {:error, error}
 end
 
-EIA.TestRunner.run
+EIA.TestRunner.run()

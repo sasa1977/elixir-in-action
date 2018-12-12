@@ -1,10 +1,11 @@
 defmodule Server do
   def start do
-    spawn(fn -> loop end)
+    spawn(fn -> loop() end)
   end
 
   def send_msg(server, message) do
-    send(server, {self, message})
+    send(server, {self(), message})
+
     receive do
       {:response, response} -> response
     end
@@ -13,10 +14,10 @@ defmodule Server do
   defp loop do
     receive do
       {caller, msg} ->
-        :timer.sleep(1000)
+        Process.sleep(1000)
         send(caller, {:response, msg})
     end
 
-    loop
+    loop()
   end
 end
