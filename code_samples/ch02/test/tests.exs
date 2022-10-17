@@ -9,8 +9,8 @@ defmodule Test do
   end
 
   test_script "arity_calc" do
-    assert 1 == Calculator.sum(1)
-    assert 3 == Calculator.sum(1, 2)
+    assert 1 == Calculator.add(1)
+    assert 3 == Calculator.add(1, 2)
   end
 
   test_script "arity_demo" do
