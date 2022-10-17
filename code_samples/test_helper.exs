@@ -4,7 +4,7 @@ defmodule TestHelper do
   defmacro test_script(script_name, opts) do
     quote do
       test unquote(script_name) do
-        modules = Code.load_file("#{__DIR__}/../" <> unquote(script_name) <> ".ex")
+        modules = Code.require_file("#{__DIR__}/../" <> unquote(script_name) <> ".ex")
 
         try do
           unquote(opts[:do])
