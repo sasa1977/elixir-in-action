@@ -1,4 +1,4 @@
-Code.load_file("#{__DIR__}/../../test_helper.exs")
+Code.require_file("#{__DIR__}/../../test_helper.exs")
 
 defmodule Test do
   use ExUnit.Case, async: false
@@ -72,6 +72,7 @@ defmodule Test do
   test_script "test_num" do
     assert :negative == TestNum.test(-1)
     assert :zero == TestNum.test(0)
+    assert :zero == TestNum.test(0.0)
     assert :positive == TestNum.test(1)
     assert :positive == TestNum.test(:foo)
   end
@@ -79,6 +80,7 @@ defmodule Test do
   test_script "test_num2" do
     assert :negative == TestNum.test(-1)
     assert :zero == TestNum.test(0)
+    assert :zero == TestNum.test(0.0)
     assert :positive == TestNum.test(1)
     assert_raise FunctionClauseError, fn -> TestNum.test(:foo) end
   end

@@ -3,7 +3,9 @@ defmodule TestNum do
     :negative
   end
 
-  def test(0), do: :zero
+  def test(x) when x == 0 do
+    :zero
+  end
 
   def test(x) when is_number(x) and x > 0 do
     :positive
