@@ -1,5 +1,5 @@
 defmodule TodoList do
-  defstruct auto_id: 1, entries: %{}
+  defstruct next_id: 1, entries: %{}
 
   def new(entries \\ []) do
     Enum.reduce(
@@ -10,20 +10,16 @@ defmodule TodoList do
   end
 
   def add_entry(todo_list, entry) do
-    entry = Map.put(entry, :id, todo_list.auto_id)
-    new_entries = Map.put(todo_list.entries, todo_list.auto_id, entry)
+    entry = Map.put(entry, :id, todo_list.next_id)
+    new_entries = Map.put(todo_list.entries, todo_list.next_id, entry)
 
-    %TodoList{todo_list | entries: new_entries, auto_id: todo_list.auto_id + 1}
+    %TodoList{todo_list | entries: new_entries, next_id: todo_list.next_id + 1}
   end
 
   def entries(todo_list, date) do
     todo_list.entries
-    |> Stream.filter(fn {_, entry} -> entry.date == date end)
-    |> Enum.map(fn {_, entry} -> entry end)
-  end
-
-  def update_entry(todo_list, %{} = new_entry) do
-    update_entry(todo_list, new_entry.id, fn _ -> new_entry end)
+    |> Map.values()
+    |> Enum.filter(fn entry -> entry.date == date end)
   end
 
   def update_entry(todo_list, entry_id, updater_fun) do
@@ -58,32 +54,13 @@ defmodule TodoList.CsvImporter do
   end
 
   defp create_entries(lines) do
-    lines
-    |> Stream.map(&extract_fields/1)
-    |> Stream.map(&create_entry/1)
-  end
-
-  defp extract_fields(line) do
-    line
-    |> String.split(",")
-    |> convert_date
-  end
-
-  defp convert_date([date_string, title]) do
-    {parse_date(date_string), title}
-  end
-
-  defp parse_date(date_string) do
-    [year, month, day] =
-      date_string
-      |> String.split("/")
-      |> Enum.map(&String.to_integer/1)
-
-    {:ok, date} = Date.new(year, month, day)
-    date
-  end
-
-  defp create_entry({date, title}) do
-    %{date: date, title: title}
+    Stream.map(
+      lines,
+      fn line ->
+        [date_string, title] = String.split(line, ",")
+        date = Date.from_iso8601!(date_string)
+        %{date: date, title: title}
+      end
+    )
   end
 end

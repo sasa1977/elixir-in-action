@@ -21,18 +21,10 @@ defmodule EIA.TestRunner do
     System.halt(1)
   end
 
-  defp check_elixir_version(project_root \\ ".") do
-    case System.cmd("elixir", ["-v"], cd: project_root, stderr_to_stdout: true) do
-      {elixir_version, 0} ->
-        if elixir_version =~ ~r/^Elixir 1\.\d\.\d+/m do
-          :ok
-        else
-          {:error, "Invalid Elixir version #{elixir_version}"}
-        end
-
-      {error, _} ->
-        {:error, error}
-    end
+  defp check_elixir_version do
+    if String.starts_with?(System.version(), "1."),
+      do: :ok,
+      else: {:error, "Invalid Elixir version #{System.version()}"}
   end
 
   defp test_scripts do
@@ -64,7 +56,6 @@ defmodule EIA.TestRunner do
   defp project_commands(project_root) do
     [
       &IO.puts("\nTesting #{&1}"),
-      &check_elixir_version/1,
       &run_mix(&1, "deps.get"),
       &run_mix(&1, "test")
     ]

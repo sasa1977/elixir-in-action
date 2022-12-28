@@ -1,4 +1,4 @@
-Code.load_file("#{__DIR__}/../../test_helper.exs")
+Code.require_file("#{__DIR__}/../../test_helper.exs")
 
 defmodule Test do
   use ExUnit.Case, async: false
