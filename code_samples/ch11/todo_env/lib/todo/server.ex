@@ -20,7 +20,13 @@ defmodule Todo.Server do
   @impl GenServer
   def init(name) do
     IO.puts("Starting to-do server for #{name}")
-    {:ok, {name, Todo.Database.get(name) || Todo.List.new()}, expiry_idle_timeout()}
+    {:ok, {name, nil}, {:continue, :init}}
+  end
+
+  @impl GenServer
+  def handle_continue(:init, {name, nil}) do
+    todo_list = Todo.Database.get(name) || Todo.List.new()
+    {:noreply, {name, todo_list}, expiry_idle_timeout()}
   end
 
   @impl GenServer

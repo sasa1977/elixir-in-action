@@ -5,36 +5,32 @@
 #
 # Note: the +P 2000000 sets maximum number of processes to 2 millions
 defmodule LoadTest do
-  @total_processes 1_000_000
-  @interval_size 100_000
-
   def run do
     {:ok, cache} = Todo.Cache.start()
 
-    interval_count = round(@total_processes / @interval_size)
-    Enum.each(0..(interval_count - 1), &run_interval(cache, make_interval(&1)))
-  end
+    total_processes = 1_000_000
 
-  defp make_interval(n) do
-    start = n * @interval_size
-    start..(start + @interval_size - 1)
-  end
-
-  defp run_interval(cache, interval) do
-    {time, _} =
+    # Since the cache is empty, this code creates new processes.
+    {put_time, _} =
       :timer.tc(fn ->
-        interval
-        |> Enum.each(&Todo.Cache.server_process(cache, "cache_#{&1}"))
+        Enum.each(
+          1..total_processes,
+          &Todo.Cache.server_process(cache, "cache_#{&1}")
+        )
       end)
 
-    IO.puts("#{inspect(interval)}: average put #{time / @interval_size} μs")
+    IO.puts("average put #{put_time / total_processes} μs")
 
-    {time, _} =
+    # Since the cache is primed, and we use the same names as in the
+    # previous loop, this code benches process retrieval.
+    {get_time, _} =
       :timer.tc(fn ->
-        interval
-        |> Enum.each(&Todo.Cache.server_process(cache, "cache_#{&1}"))
+        Enum.each(
+          1..total_processes,
+          &Todo.Cache.server_process(cache, "cache_#{&1}")
+        )
       end)
 
-    IO.puts("#{inspect(interval)}: average get #{time / @interval_size} μs\n")
+    IO.puts("average get #{get_time / total_processes} μs")
   end
 end
