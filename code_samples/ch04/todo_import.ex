@@ -50,7 +50,7 @@ defmodule TodoList.CsvImporter do
   defp read_lines(file_name) do
     file_name
     |> File.stream!()
-    |> Stream.map(&String.replace(&1, "\n", ""))
+    |> Stream.map(&String.trim_trailing(&1, "\n"))
   end
 
   defp create_entries(lines) do

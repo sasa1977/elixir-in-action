@@ -2,7 +2,7 @@ defmodule EnumStreams do
   defp filtered_lines!(path) do
     path
     |> File.stream!()
-    |> Stream.map(&String.replace(&1, "\n", ""))
+    |> Stream.map(&String.trim_trailing(&1, "\n"))
   end
 
   def lines_lengths!(path) do
