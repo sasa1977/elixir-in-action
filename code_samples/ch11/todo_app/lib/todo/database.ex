@@ -3,6 +3,7 @@ defmodule Todo.Database do
   @db_folder "./persist"
 
   def start_link do
+    IO.puts("Starting database server.")
     File.mkdir_p!(@db_folder)
 
     children = Enum.map(1..@pool_size, &worker_spec/1)

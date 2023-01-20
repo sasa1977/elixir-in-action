@@ -15,6 +15,7 @@ defmodule Todo.DatabaseWorker do
 
   @impl GenServer
   def init(db_folder) do
+    IO.puts("Starting database worker.")
     {:ok, db_folder}
   end
 
