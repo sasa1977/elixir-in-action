@@ -21,7 +21,8 @@ defmodule DatabaseServer do
   defp loop(connection) do
     receive do
       {:run_query, caller, query_def} ->
-        send(caller, {:query_result, run_query(connection, query_def)})
+        query_result = run_query(connection, query_def)
+        send(caller, {:query_result, query_result})
     end
 
     loop(connection)
