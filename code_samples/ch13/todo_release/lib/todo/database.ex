@@ -5,7 +5,7 @@ defmodule Todo.Database do
     # Node name is used to determine the database folder. This allows us to
     # start multiple nodes from the same folders, and data will not clash.
     [name_prefix, _] = "#{node()}" |> String.split("@")
-    db_folder = "#{Keyword.fetch!(db_settings, :folder)}/#{name_prefix}/"
+    db_folder = "#{Keyword.fetch!(db_settings, :db_folder)}/#{name_prefix}/"
 
     File.mkdir_p!(db_folder)
 
@@ -14,7 +14,7 @@ defmodule Todo.Database do
       [
         name: {:local, __MODULE__},
         worker_module: Todo.DatabaseWorker,
-        size: Keyword.fetch!(db_settings, :pool_size)
+        size: 3
       ],
       [db_folder]
     )

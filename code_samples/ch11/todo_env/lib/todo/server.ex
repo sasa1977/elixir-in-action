@@ -52,5 +52,5 @@ defmodule Todo.Server do
     {:stop, :normal, {name, todo_list}}
   end
 
-  defp expiry_idle_timeout(), do: Application.fetch_env!(:todo, :todo_item_expiry)
+  defp expiry_idle_timeout(), do: Application.fetch_env!(:todo, :todo_server_expiry)
 end
