@@ -17,7 +17,7 @@ defmodule Todo.Server do
     Todo.ProcessRegistry.via_tuple({__MODULE__, name})
   end
 
-  @expiry_idle_timeout :timer.seconds(10)
+  @expiry_idle_timeout :timer.minutes(10)
 
   @impl GenServer
   def init(name) do
