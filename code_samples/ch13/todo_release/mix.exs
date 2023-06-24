@@ -5,10 +5,9 @@ defmodule Todo.MixProject do
     [
       app: :todo,
       version: "0.1.0",
-      elixir: "~> 1.14",
+      elixir: "~> 1.15",
       start_permanent: Mix.env() == :prod,
-      deps: deps(),
-      preferred_cli_env: [release: :prod]
+      deps: deps()
     ]
   end
 
@@ -23,6 +22,12 @@ defmodule Todo.MixProject do
     [
       {:poolboy, "~> 1.5"},
       {:plug_cowboy, "~> 2.6"}
+    ]
+  end
+
+  def cli do
+    [
+      preferred_envs: [release: :prod]
     ]
   end
 end
