@@ -4,6 +4,6 @@ To compile and run the code, you'll need Elixir 1.15 and Erlang 26.x. If you're 
 
 A `git` client should also be installed and available somewhere in the execution path.
 
-The code for the second edition can be found [here](https://github.com/sasa1977/elixir-in-action/tree/edition-2).
+The code for the second edition can be found [here](https://github.com/sasa1977/elixir-in-action/tree/2nd-edition).
 
-The code for the first edition can be found [here](https://github.com/sasa1977/elixir-in-action/tree/edition-1).
+The code for the first edition can be found [here](https://github.com/sasa1977/elixir-in-action/tree/1st-edition).
